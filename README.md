@@ -30,7 +30,7 @@ library(valid)
 ``` r
 #' Valid devops environments
 #'
-#' @param devops_env [[character]] DevOps environment
+#' @param x [[character]] DevOps environment
 #' @param reverse [[logical]] Reverse order
 #' @param flip [[logical]] Flip values and names
 #' @param strict [[logical]] Throw error if invalid choice or return empty
@@ -40,7 +40,7 @@ library(valid)
 #'
 #' @examples
 valid_devops_envs <- function(
-  devops_env = character(),
+  x = character(),
   reverse = FALSE,
   flip = FALSE,
   strict = TRUE
@@ -48,8 +48,8 @@ valid_devops_envs <- function(
   values <- c("dev", "prod")
   names(values) <- toupper(values)
 
-  valid_generic_(
-    choice = devops_env,
+  valid(
+    choice = x,
     choices = values,
     reverse = reverse,
     flip = flip,
@@ -83,7 +83,7 @@ valid_devops_envs(flip = TRUE)
 Valid:
 
 ``` r
-valid_devops_envs(devops_env = "dev")
+valid_devops_envs("dev")
 #>   DEV 
 #> "dev"
 ```
@@ -91,7 +91,7 @@ valid_devops_envs(devops_env = "dev")
 Invalid:
 
 ``` r
-try(valid_devops_envs(devops_env = "abc"))
+try(valid_devops_envs("abc"))
 #> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
 #>   could not find function "%>%"
 ```
@@ -99,7 +99,32 @@ try(valid_devops_envs(devops_env = "abc"))
 Invalid but non-strict:
 
 ``` r
-valid_devops_envs(devops_env = "abc", strict = FALSE)
+valid_devops_envs("abc", strict = FALSE)
+#> named character(0)
+```
+
+#### Choice via name
+
+Valid:
+
+``` r
+valid_devops_envs("PROD")
+#>   PROD 
+#> "prod"
+```
+
+Invalid:
+
+``` r
+try(valid_devops_envs("ABC"))
+#> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
+#>   could not find function "%>%"
+```
+
+Invalid but non-strict:
+
+``` r
+valid_devops_envs("ABC", strict = FALSE)
 #> named character(0)
 ```
 
@@ -108,7 +133,7 @@ valid_devops_envs(devops_env = "abc", strict = FALSE)
 Valid:
 
 ``` r
-valid_devops_envs(devops_env = 2)
+valid_devops_envs(2)
 #>   PROD 
 #> "prod"
 ```
@@ -116,7 +141,7 @@ valid_devops_envs(devops_env = 2)
 Invalid:
 
 ``` r
-try(valid_devops_envs(devops_env = 3))
+try(valid_devops_envs(3))
 #> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
 #>   could not find function "%>%"
 ```
@@ -124,7 +149,7 @@ try(valid_devops_envs(devops_env = 3))
 Invalid but non-strict:
 
 ``` r
-valid_devops_envs(devops_env = 3, strict = FALSE)
+valid_devops_envs(3, strict = FALSE)
 #> named character(0)
 ```
 
@@ -134,7 +159,10 @@ valid_devops_envs(devops_env = 3, strict = FALSE)
 foo <- function(
   devops_env = valid_devops_envs("dev")
 ) {
+  # Input validation
   devops_env <- match.arg(devops_env, valid_devops_envs())
+  
+  # Body
   stringr::str_glue("DevOps env: {stringr::str_c(devops_env, collapse = ', ')}")
 }
 ```

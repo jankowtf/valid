@@ -9,7 +9,7 @@ valid_devops_envs <- function(
   values <- c("dev", "prod")
   names(values) <- values
 
-  valid_generic_(
+  valid(
     choice = devops_env,
     choices = values,
     reverse = reverse,

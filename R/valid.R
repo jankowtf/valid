@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-valid_generic_ <- function(
+valid <- function(
   choice = character(),
   choices = character(),
   reverse = FALSE,

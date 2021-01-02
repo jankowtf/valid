@@ -1,7 +1,7 @@
 # No choice ---------------------------------------------------------------
 
 test_that("No choice", {
-  result <- valid_generic_(
+  result <- valid(
     choices = letters[1:3]
   )
 
@@ -11,7 +11,7 @@ test_that("No choice", {
 })
 
 test_that("No choice: reverse", {
-  result <- valid_generic_(
+  result <- valid(
     choices = letters[1:3],
     reverse = TRUE
   )
@@ -22,7 +22,7 @@ test_that("No choice: reverse", {
 })
 
 test_that("No choice: flip", {
-  result <- valid_generic_(
+  result <- valid(
     choices = letters[1:3] %>%
       purrr::set_names(LETTERS[1:3]),
     flip = TRUE
@@ -37,7 +37,7 @@ test_that("No choice: flip", {
 # Value choice ------------------------------------------------------------
 
 test_that("Choice: value: valid", {
-  result <- valid_generic_(
+  result <- valid(
     choice = letters[1],
     choices = letters[1:3]
   )
@@ -49,7 +49,7 @@ test_that("Choice: value: valid", {
 
 test_that("Choice: value: invalid", {
   expect_error(
-    valid_generic_(
+    valid(
       choice = letters[4],
       choices = letters[1:3]
     )
@@ -57,7 +57,7 @@ test_that("Choice: value: invalid", {
 })
 
 test_that("Choice: value: invalid: non-strict", {
-  result <- valid_generic_(
+  result <- valid(
     choice = letters[4],
     choices = letters[1:3],
     strict = FALSE
@@ -71,7 +71,7 @@ test_that("Choice: value: invalid: non-strict", {
 # Index choice ------------------------------------------------------------
 
 test_that("Choice: value: index", {
-  result <- valid_generic_(
+  result <- valid(
     choice = 1,
     choices = letters[1:3]
   )
@@ -83,7 +83,7 @@ test_that("Choice: value: index", {
 
 test_that("Choice: index: invalid", {
   expect_error(
-    valid_generic_(
+    valid(
       choice = 4,
       choices = letters[1:3]
     )
@@ -91,7 +91,7 @@ test_that("Choice: index: invalid", {
 })
 
 test_that("Choice: index: invalid: non-strict", {
-  result <- valid_generic_(
+  result <- valid(
     choice = 4,
     choices = letters[1:3],
     strict = FALSE
