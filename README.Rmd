@@ -1,0 +1,173 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# valid
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/valid)](https://CRAN.R-project.org/package=valid)
+<!-- badges: end -->
+
+Facilitating structured input validation
+
+## Installation
+
+```{r eval=FALSE}
+remotes::install_github("rappster/valid")
+```
+
+## Example
+
+### Custom validation function
+
+```{r}
+library(valid)
+```
+
+```{r}
+#' Valid devops environments
+#'
+#' @param devops_env [[character]] DevOps environment
+#' @param reverse [[logical]] Reverse order
+#' @param flip [[logical]] Flip values and names
+#' @param strict [[logical]] Throw error if invalid choice or return empty
+#'
+#' @return
+#' @export
+#'
+#' @examples
+valid_devops_envs <- function(
+  devops_env = character(),
+  reverse = FALSE,
+  flip = FALSE,
+  strict = TRUE
+) {
+  values <- c("dev", "prod")
+  names(values) <- toupper(values)
+
+  valid_generic_(
+    choice = devops_env,
+    choices = values,
+    reverse = reverse,
+    flip = flip,
+    strict = strict
+  )
+}
+```
+
+#### Apply without explicit choice
+
+```{r}
+valid_devops_envs()
+```
+
+```{r}
+valid_devops_envs(reverse = TRUE)
+```
+```{r}
+valid_devops_envs(flip = TRUE)
+```
+
+#### Choice via value
+
+Valid:
+
+```{r}
+valid_devops_envs(devops_env = "dev")
+```
+Invalid:
+
+```{r}
+try(valid_devops_envs(devops_env = "abc"))
+```
+
+Invalid but non-strict:
+
+```{r}
+valid_devops_envs(devops_env = "abc", strict = FALSE)
+```
+
+#### Choice via index/position
+
+Valid:
+
+```{r}
+valid_devops_envs(devops_env = 2)
+```
+
+Invalid:
+
+```{r}
+try(valid_devops_envs(devops_env = 3))
+```
+
+Invalid but non-strict:
+
+```{r}
+valid_devops_envs(devops_env = 3, strict = FALSE)
+```
+### Use validation function inside of another function
+
+```{r}
+foo <- function(
+  devops_env = valid_devops_envs("dev")
+) {
+  devops_env <- match.arg(devops_env, valid_devops_envs())
+  stringr::str_glue("DevOps env: {stringr::str_c(devops_env, collapse = ', ')}")
+}
+```
+
+#### Keeping the default
+
+```{r}
+foo()
+```
+
+#### Eager input validation
+
+```{r}
+foo(
+  devops_env = valid_devops_envs("dev")
+)
+```
+
+```{r}
+try(
+  foo(
+    devops_env = valid_devops_envs("abc")
+  )
+)
+```
+
+#### Lazy input validation
+
+```{r}
+foo(
+  devops_env = "dev"
+)
+```
+
+```{r}
+try(
+  foo(
+    devops_env = "abc"
+  )
+)
+```
+
+## Code of Conduct
+
+Please note that the valid project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+
