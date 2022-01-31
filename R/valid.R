@@ -66,3 +66,134 @@ flip_values_and_names <- function(x) {
   names(x) <- names
   x
 }
+
+# Answers to choices ------------------------------------------------------
+
+#' Valid: yes/no
+#'
+#' @param choice [character] Actual choice out of all available choices
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_yes_no <- function(choice = character(), flip = FALSE) {
+  valid::valid(
+    choice = choice,
+    choices = c(
+      yes = "Yes",
+      no = "No"
+    ),
+    flip = flip
+  )
+}
+
+#' Valid: again/exit
+#'
+#' @param choice [character] Actual choice out of all available choices
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_again_exit <- function(choice = character(), flip = FALSE) {
+  valid::valid(
+    choice = choice,
+    choices = c(
+      again = "Let me start over",
+      exit = "Exit"
+    ),
+    flip = flip
+  )
+}
+
+#' Valid: none
+#'
+#' @param choice [character] Actual choice out of all available choices
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_none <- function(choice = character(), flip = FALSE) {
+  valid::valid(
+    choice = choice,
+    choices = c(
+      none = "None"
+    ),
+    flip = flip
+  )
+}
+
+#' Valid: yes/no/again/exit
+#'
+#' @param choice [character] Actual choice out of all available choices
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_yes_no_again_exit <- function(choice = character(), flip = FALSE) {
+  valid::valid(
+    choice = choice,
+    choices = c(
+      valid_yes_no(),
+      valid_again_exit()
+    ),
+    flip = flip
+  )
+}
+
+# Licenses ----------------------------------------------------------------
+
+#' Valid: licenses
+#'
+#' @param license [character] License choice
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_licenses <- function(license = character(), flip = FALSE) {
+  licenses <- c("GPL v3", "MIT", "CC0", "CCBY 4.0", "LGPL v3", "APL 2.0", "AGPL v3")
+  names <- c("gpl3", "mit", "cc0", "ccby", "lgpl", "apl2", "agpl3")
+  names(licenses) <- names
+  valid::valid(
+    choice = license,
+    choices = licenses,
+    flip = flip
+  )
+}
+
+# Authentication ----------------------------------------------------------
+
+#' Valid: authentication
+#'
+#' @param auth ([character]) Authentication choice
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_authentication <- function(auth = character(), flip = FALSE) {
+  auths <- c("ssh", "https")
+  names(auths) <- auths
+  valid::valid(
+    choice = auth,
+    choices = auths,
+    flip = flip
+  )
+}
+
+# Package dependencies ----------------------------------------------------
+
+#' Valid: dependency types
+#'
+#' @param type ([character]) Dependency type choice
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_dep_types <- function(type = character(), flip = FALSE) {
+  types <- c("Suggests", "Imports", "Depends", "Enhances", "LinkingTo")
+  names(types) <- types
+  valid::valid(
+    choice = type,
+    choices = types,
+    flip = flip
+  )
+}

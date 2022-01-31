@@ -1,5 +1,4 @@
 source("renv/activate.R")
-
 set_options <- function (
   repos = c(RSPM = "https://packagemanager.rstudio.com/all/__linux__/focal/latest"),
   pkgType = "binary"
