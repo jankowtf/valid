@@ -11,21 +11,64 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/valid)](https://CRAN.R-project.org/package=valid)
 <!-- badges: end -->
 
-Facilitating structured input validation
-
 ## Installation
 
 ``` r
+# install.packages("remotes")
 remotes::install_github("rappster/valid")
 ```
 
-## Example
+## What?
 
-### Custom validation function
+Helpers for facilitating systematic input validation
+
+## Why?
+
+Input validation is tedious already. This package hopefully provides
+some functionality to make the task a bit easier or at least more fun.
+
+## Overview
 
 ``` r
 library(valid)
 ```
+
+### Some build-in functions
+
+The amount of such built-in functions will grow over time in a “scratch
+my own itch” manner
+
+``` r
+valid_dep_types()
+#>    Suggests     Imports     Depends    Enhances   LinkingTo 
+#>  "Suggests"   "Imports"   "Depends"  "Enhances" "LinkingTo"
+valid_dep_types("Suggests")
+#>   Suggests 
+#> "Suggests"
+try(valid_dep_types("I don't exist"))
+#> Error in valid::valid(choice = type, choices = types, flip = flip) : 
+#>   Invalid choice: valid_dep_types("I don't exist")
+
+valid_authentication()
+#>     ssh   https 
+#>   "ssh" "https"
+valid_authentication("https")
+#>   https 
+#> "https"
+
+valid_licenses()
+#>       gpl3        mit        cc0       ccby       lgpl       apl2      agpl3 
+#>   "GPL v3"      "MIT"      "CC0" "CCBY 4.0"  "LGPL v3"  "APL 2.0"  "AGPL v3"
+valid_licenses(flip = TRUE)
+#>   GPL v3      MIT      CC0 CCBY 4.0  LGPL v3  APL 2.0  AGPL v3 
+#>   "gpl3"    "mit"    "cc0"   "ccby"   "lgpl"   "apl2"  "agpl3"
+```
+
+### Custom function
+
+#### Definition
+
+You can build your functions on top of `valid::valid()`
 
 ``` r
 #' Valid devops environments
@@ -92,8 +135,8 @@ Invalid:
 
 ``` r
 try(valid_devops_envs("abc"))
-#> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
-#>   could not find function "%>%"
+#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#>   Invalid choice: valid_devops_envs("abc")
 ```
 
 Invalid but non-strict:
@@ -117,8 +160,8 @@ Invalid:
 
 ``` r
 try(valid_devops_envs("ABC"))
-#> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
-#>   could not find function "%>%"
+#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#>   Invalid choice: valid_devops_envs("ABC")
 ```
 
 Invalid but non-strict:
@@ -142,8 +185,8 @@ Invalid:
 
 ``` r
 try(valid_devops_envs(3))
-#> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
-#>   could not find function "%>%"
+#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#>   Invalid choice: valid_devops_envs(3)
 ```
 
 Invalid but non-strict:
@@ -189,8 +232,8 @@ try(
     devops_env = valid_devops_envs("abc")
   )
 )
-#> Error in "Invalid choice: {call}({deparse(choice)})" %>% stringr::str_glue() : 
-#>   could not find function "%>%"
+#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#>   Invalid choice: valid_devops_envs("abc")
 ```
 
 #### Lazy input validation

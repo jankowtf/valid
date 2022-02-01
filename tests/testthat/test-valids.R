@@ -27,6 +27,22 @@ test_that("Yes/no/again/exit", {
   expect_identical(result, expected)
 })
 
+test_that("Is", {
+  result <- "yes" %>% is_answer_true_false()
+  expect_true(result)
+
+  result <- "no" %>% is_answer_true_false()
+  expect_true(result)
+
+  result <- "exit" %>% is_answer_true_false()
+  expect_false(result)
+
+  result <- "abc" %>% is_answer_true_false()
+  expect_false(result)
+})
+
+# Other -------------------------------------------------------------------
+
 test_that("Licenses", {
   result <- valid_licenses()
   expected <-

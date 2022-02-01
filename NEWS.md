@@ -1,3 +1,11 @@
+# valid 0.0.0.9003
+
+Updated README and new built-in functions
+
+# valid 0.0.0.9002
+
+Changes not recorded
+
 # valid 0.0.0.9001
 
 Renaming

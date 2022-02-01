@@ -67,6 +67,34 @@ flip_values_and_names <- function(x) {
   x
 }
 
+# Helpers ------------------------------------------------------------------
+
+#' Is answer really TRUE or FALSE?
+#'
+#' @param answer ([character]) Answer
+#'
+#' @return
+#' @export
+is_answer_true_false <- function(answer) {
+  # answer %>%
+  #   not_in(
+  #     c(valid_again_exit(flip = TRUE), valid_none(flip = TRUE))
+  #   )
+
+  answer %>%
+    `%in%`(valid_yes_no(flip = TRUE))
+}
+
+#' Check if not in set
+#'
+#' @param x ([character])
+#' @param set ([character])
+#'
+#' @return ([logical(1)])
+not_in <- function(x, set) {
+  !(x %in% set)
+}
+
 # Answers to choices ------------------------------------------------------
 
 #' Valid: yes/no

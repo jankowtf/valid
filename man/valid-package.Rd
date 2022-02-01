@@ -6,7 +6,7 @@
 \alias{valid-package}
 \title{valid: Facilitating systematic input validation}
 \description{
-Little helper functions for systematic input validation
+Little helper functions for facilitating systematic input validation
 }
 \author{
 \strong{Maintainer}: Janko Thyson \email{janko@rappster.io} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})

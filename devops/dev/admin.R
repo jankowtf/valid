@@ -8,6 +8,9 @@ usethis::use_build_ignore("devops/.*", escape = FALSE)
 renv::install("devtools")
 renv::install("testthat")
 renv::install("yaml")
+renv::install("htmltools")
+renv::install("rmarkdown")
+renv::install("tinytex")
 
 # Tests -------------------------------------------------------------------
 
@@ -20,3 +23,4 @@ usethis::use_test("valids")
 
 usethis::use_package_doc()
 usethis::use_pipe()
+usethis::use_version("dev")

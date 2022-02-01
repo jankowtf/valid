@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -20,21 +22,49 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/valid)](https://CRAN.R-project.org/package=valid)
 <!-- badges: end -->
 
-Facilitating structured input validation
-
 ## Installation
 
 ```{r eval=FALSE}
+# install.packages("remotes")
 remotes::install_github("rappster/valid")
 ```
 
-## Example
+## What?
 
-### Custom validation function
+Helpers for facilitating systematic input validation
+
+## Why?
+
+Input validation is tedious already. This package hopefully provides some
+functionality to make the task a bit easier or at least more fun.
+
+## Overview
 
 ```{r}
 library(valid)
 ```
+
+### Some build-in functions
+
+The amount of such built-in functions will grow over time in a "scratch my own itch" manner
+
+```{r}
+valid_dep_types()
+valid_dep_types("Suggests")
+try(valid_dep_types("I don't exist"))
+
+valid_authentication()
+valid_authentication("https")
+
+valid_licenses()
+valid_licenses(flip = TRUE)
+```
+
+### Custom function
+
+#### Definition
+
+You can build your functions on top of `valid::valid()` 
 
 ```{r}
 #' Valid devops environments
