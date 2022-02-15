@@ -2,7 +2,7 @@
 % Please edit documentation in R/valid.R
 \name{valid_dep_types}
 \alias{valid_dep_types}
-\title{Valid: dependency types}
+\title{Valid dependency types}
 \usage{
 valid_dep_types(type = character(), flip = FALSE)
 }
@@ -15,5 +15,5 @@ valid_dep_types(type = character(), flip = FALSE)
 
 }
 \description{
-Valid: dependency types
+Valid dependency types
 }

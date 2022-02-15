@@ -153,18 +153,24 @@ valid_none <- function(choice = character(), flip = FALSE) {
 #' Valid: yes/no/again/exit
 #'
 #' @param choice [character] Actual choice out of all available choices
-#' @param flip ([logical]) Flip the vector's order?
+#' @param flip ([logical]) Flip names and values?
+#' @param reverse ([logical]) Flip order?
 #'
 #' @return
 #' @export
-valid_yes_no_again_exit <- function(choice = character(), flip = FALSE) {
+valid_yes_no_again_exit <- function(
+  choice = character(),
+  flip = FALSE,
+  reverse = FALSE
+) {
   valid::valid(
     choice = choice,
     choices = c(
       valid_yes_no(),
       valid_again_exit()
     ),
-    flip = flip
+    flip = flip,
+    reverse = reverse
   )
 }
 
@@ -173,17 +179,23 @@ valid_yes_no_again_exit <- function(choice = character(), flip = FALSE) {
 #' Valid authentication
 #'
 #' @param auth ([character]) Authentication choice
-#' @param flip ([logical]) Flip the vector's order?
+#' @param flip ([logical]) Flip names and values?
+#' @param reverse ([logical00]) Reverse order?
 #'
 #' @return
 #' @export
-valid_authentication <- function(auth = character(), flip = FALSE) {
+valid_authentication <- function(
+  auth = character(),
+  flip = FALSE,
+  reverse = FALSE
+) {
   auths <- c("ssh", "https")
   names(auths) <- auths
   valid::valid(
     choice = auth,
     choices = auths,
-    flip = flip
+    flip = flip,
+    reverse = reverse
   )
 }
 
@@ -192,8 +204,8 @@ valid_authentication <- function(auth = character(), flip = FALSE) {
 #' Valid DevOps environments
 #'
 #' @param devops_env ([character]) DevOps environment choice
-#' @param reverse ([logical]) Reverse the vector's order?
 #' @param flip ([logical]) Flip names and values?
+#' @param reverse ([logical]) Flip order?
 #'
 #' @return
 #' @export
@@ -203,8 +215,8 @@ valid_authentication <- function(auth = character(), flip = FALSE) {
 #' valid_devops_envs("staging", reverse = TRUE)
 valid_devops_envs <- function(
   devops_env = character(),
-  reverse = FALSE,
-  flip = FALSE
+  flip = FALSE,
+  reverse = FALSE
 ) {
   values <- c("dev", "staging", "prod")
   names(values) <- values
@@ -212,8 +224,8 @@ valid_devops_envs <- function(
   valid::valid(
     choice = devops_env,
     choices = values,
-    reverse = reverse,
-    flip = flip
+    flip = flip,
+    reverse = reverse
   )
 }
 
@@ -222,18 +234,24 @@ valid_devops_envs <- function(
 #' Valid licenses
 #'
 #' @param license [character] License choice
-#' @param flip ([logical]) Flip the vector's order?
+#' @param flip ([logical]) Flip names and values?
+#' @param reverse ([logical]) Flip order?
 #'
 #' @return
 #' @export
-valid_licenses <- function(license = character(), flip = FALSE) {
+valid_licenses <- function(
+  license = character(),
+  flip = FALSE,
+  reverse = FALSE
+) {
   licenses <- c("GPL v3", "MIT", "CC0", "CCBY 4.0", "LGPL v3", "APL 2.0", "AGPL v3")
   names <- c("gpl3", "mit", "cc0", "ccby", "lgpl", "apl2", "agpl3")
   names(licenses) <- names
   valid::valid(
     choice = license,
     choices = licenses,
-    flip = flip
+    flip = flip,
+    reverse = reverse
   )
 }
 
@@ -242,16 +260,22 @@ valid_licenses <- function(license = character(), flip = FALSE) {
 #' Valid dependency types
 #'
 #' @param type ([character]) Dependency type choice
-#' @param flip ([logical]) Flip the vector's order?
+#' @param flip ([logical]) Flip names and values?
+#' @param reverse ([logical]) Flip order?
 #'
 #' @return
 #' @export
-valid_dep_types <- function(type = character(), flip = FALSE) {
+valid_dep_types <- function(
+  type = character(),
+  flip = FALSE,
+  reverse = FALSE
+) {
   types <- c("Suggests", "Imports", "Depends", "Enhances", "LinkingTo")
   names(types) <- types
   valid::valid(
     choice = type,
     choices = types,
-    flip = flip
+    flip = flip,
+    reverse = reverse
   )
 }

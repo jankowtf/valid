@@ -2,7 +2,7 @@
 % Please edit documentation in R/valid.R
 \name{valid_authentication}
 \alias{valid_authentication}
-\title{Valid: authentication}
+\title{Valid authentication}
 \usage{
 valid_authentication(auth = character(), flip = FALSE)
 }
@@ -15,5 +15,5 @@ valid_authentication(auth = character(), flip = FALSE)
 
 }
 \description{
-Valid: authentication
+Valid authentication
 }

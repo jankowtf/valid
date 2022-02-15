@@ -41,7 +41,23 @@ test_that("Is", {
   expect_false(result)
 })
 
-# Other -------------------------------------------------------------------
+# Authentication ----------------------------------------------------------
+
+test_that("Authentication", {
+  result <- valid_authentication()
+  expected <- c(ssh = "ssh", https = "https")
+  expect_identical(result, expected)
+})
+
+# DevOps environments -----------------------------------------------------
+
+test_that("DevOps environments", {
+  result <- valid_devops_envs()
+  expected <- c(dev = "dev", staging = "staging", prod = "prod")
+  expect_identical(result, expected)
+})
+
+# Licenses ----------------------------------------------------------------
 
 test_that("Licenses", {
   result <- valid_licenses()
@@ -58,11 +74,7 @@ test_that("Licenses", {
   expect_identical(result, expected)
 })
 
-test_that("Authentication", {
-  result <- valid_authentication()
-  expected <- c(ssh = "ssh", https = "https")
-  expect_identical(result, expected)
-})
+# Package dependency types ------------------------------------------------
 
 test_that("Package dependency types", {
   result <- valid_dep_types()

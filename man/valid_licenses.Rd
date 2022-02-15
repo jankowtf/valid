@@ -2,7 +2,7 @@
 % Please edit documentation in R/valid.R
 \name{valid_licenses}
 \alias{valid_licenses}
-\title{Valid: licenses}
+\title{Valid licenses}
 \usage{
 valid_licenses(license = character(), flip = FALSE)
 }
@@ -15,5 +15,5 @@ valid_licenses(license = character(), flip = FALSE)
 
 }
 \description{
-Valid: licenses
+Valid licenses
 }
