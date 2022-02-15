@@ -1,6 +1,6 @@
 # valid 0.0.0.9004
 
-DevOps environments
+DevOps environments, reverse, README
 
 - Added `valid_devops_envs()`
 
