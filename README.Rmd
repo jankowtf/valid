@@ -24,7 +24,7 @@ knitr::opts_chunk$set(
 
 ## Installation
 
-```{r eval=FALSE}
+```{r, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("rappster/valid")
 ```

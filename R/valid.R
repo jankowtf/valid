@@ -168,9 +168,58 @@ valid_yes_no_again_exit <- function(choice = character(), flip = FALSE) {
   )
 }
 
+# Authentication ----------------------------------------------------------
+
+#' Valid authentication
+#'
+#' @param auth ([character]) Authentication choice
+#' @param flip ([logical]) Flip the vector's order?
+#'
+#' @return
+#' @export
+valid_authentication <- function(auth = character(), flip = FALSE) {
+  auths <- c("ssh", "https")
+  names(auths) <- auths
+  valid::valid(
+    choice = auth,
+    choices = auths,
+    flip = flip
+  )
+}
+
+# DevOps environments -----------------------------------------------------
+
+#' Valid DevOps environments
+#'
+#' @param devops_env ([character]) DevOps environment choice
+#' @param reverse ([logical]) Reverse the vector's order?
+#' @param flip ([logical]) Flip names and values?
+#'
+#' @return
+#' @export
+#' @examples
+#' valid_devops_envs()
+#' valid_devops_envs("staging")
+#' valid_devops_envs("staging", reverse = TRUE)
+valid_devops_envs <- function(
+  devops_env = character(),
+  reverse = FALSE,
+  flip = FALSE
+) {
+  values <- c("dev", "staging", "prod")
+  names(values) <- values
+
+  valid::valid(
+    choice = devops_env,
+    choices = values,
+    reverse = reverse,
+    flip = flip
+  )
+}
+
 # Licenses ----------------------------------------------------------------
 
-#' Valid: licenses
+#' Valid licenses
 #'
 #' @param license [character] License choice
 #' @param flip ([logical]) Flip the vector's order?
@@ -188,28 +237,9 @@ valid_licenses <- function(license = character(), flip = FALSE) {
   )
 }
 
-# Authentication ----------------------------------------------------------
-
-#' Valid: authentication
-#'
-#' @param auth ([character]) Authentication choice
-#' @param flip ([logical]) Flip the vector's order?
-#'
-#' @return
-#' @export
-valid_authentication <- function(auth = character(), flip = FALSE) {
-  auths <- c("ssh", "https")
-  names(auths) <- auths
-  valid::valid(
-    choice = auth,
-    choices = auths,
-    flip = flip
-  )
-}
-
 # Package dependencies ----------------------------------------------------
 
-#' Valid: dependency types
+#' Valid dependency types
 #'
 #' @param type ([character]) Dependency type choice
 #' @param flip ([logical]) Flip the vector's order?

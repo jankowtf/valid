@@ -1,3 +1,10 @@
+# valid 0.0.0.9004
+
+DevOps environments
+
+- Added `valid_devops_envs()`
+
+
 # valid 0.0.0.9003
 
 Updated README and new built-in functions
