@@ -4,16 +4,24 @@
 \alias{valid_authentication}
 \title{Valid authentication}
 \usage{
-valid_authentication(auth = character(), flip = FALSE)
+valid_authentication(auth = character(), ...)
 }
 \arguments{
-\item{auth}{(\link{character}) Authentication choice}
+\item{auth}{(\link{character}) Selection from available valid choices}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
 }
 \description{
 Valid authentication
+}
+\examples{
+valid_authentication()
+valid_authentication("ssh")
+try(valid_authentication("invalid"))
+valid_authentication(reverse = TRUE)
+valid_authentication(flip = TRUE)
+valid_authentication(unname = TRUE)
 }

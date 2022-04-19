@@ -4,16 +4,24 @@
 \alias{valid_yes_no_again_exit}
 \title{Valid: yes/no/again/exit}
 \usage{
-valid_yes_no_again_exit(choice = character(), flip = FALSE)
+valid_yes_no_again_exit(choice = character(), ...)
 }
 \arguments{
-\item{choice}{\link{character} Actual choice out of all available choices}
+\item{choice}{(\link{character}) Selection from available valid choices}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
 }
 \description{
 Valid: yes/no/again/exit
+}
+\examples{
+valid_yes_no_again_exit()
+valid_yes_no_again_exit("yes")
+try(valid_yes_no_again_exit("invalid"))
+valid_yes_no_again_exit(reverse = TRUE)
+valid_yes_no_again_exit(flip = TRUE)
+valid_yes_no_again_exit(unname = TRUE)
 }

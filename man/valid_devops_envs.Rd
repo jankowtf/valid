@@ -4,14 +4,12 @@
 \alias{valid_devops_envs}
 \title{Valid DevOps environments}
 \usage{
-valid_devops_envs(devops_env = character(), reverse = FALSE, flip = FALSE)
+valid_devops_envs(devops_env = character(), ...)
 }
 \arguments{
-\item{devops_env}{(\link{character}) DevOps environment choice}
+\item{devops_env}{(\link{character}) Selection from available valid choices}
 
-\item{reverse}{(\link{logical}) Reverse the vector's order?}
-
-\item{flip}{(\link{logical}) Flip names and values?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
@@ -22,5 +20,8 @@ Valid DevOps environments
 \examples{
 valid_devops_envs()
 valid_devops_envs("staging")
-valid_devops_envs("staging", reverse = TRUE)
+try(valid_devops_envs("invalid"))
+valid_devops_envs(reverse = TRUE)
+valid_devops_envs(flip = TRUE)
+valid_devops_envs(unname = TRUE)
 }

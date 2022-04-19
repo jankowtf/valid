@@ -4,16 +4,24 @@
 \alias{valid_none}
 \title{Valid: none}
 \usage{
-valid_none(choice = character(), flip = FALSE)
+valid_none(choice = character(), ...)
 }
 \arguments{
-\item{choice}{\link{character} Actual choice out of all available choices}
+\item{choice}{(\link{character}) Selection from available valid choices}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that should be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
 }
 \description{
 Valid: none
+}
+\examples{
+valid_none()
+valid_none("none")
+try(valid_none("invalid"))
+valid_none(reverse = TRUE)
+valid_none(flip = TRUE)
+valid_none(unname = TRUE)
 }

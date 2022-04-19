@@ -4,12 +4,12 @@
 \alias{valid_licenses}
 \title{Valid licenses}
 \usage{
-valid_licenses(license = character(), flip = FALSE)
+valid_licenses(license = character(), ...)
 }
 \arguments{
 \item{license}{\link{character} License choice}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}#'}
 }
 \value{
 

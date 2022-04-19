@@ -4,16 +4,24 @@
 \alias{valid_again_exit}
 \title{Valid: again/exit}
 \usage{
-valid_again_exit(choice = character(), flip = FALSE)
+valid_again_exit(choice = character(), ...)
 }
 \arguments{
-\item{choice}{\link{character} Actual choice out of all available choices}
+\item{choice}{(\link{character}) Selection from available valid choices}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}})]}
 }
 \value{
 
 }
 \description{
 Valid: again/exit
+}
+\examples{
+valid_again_exit()
+valid_again_exit("again")
+try(valid_again_exit("invalid"))
+valid_again_exit(reverse = TRUE)
+valid_again_exit(flip = TRUE)
+valid_again_exit(unname = TRUE)
 }

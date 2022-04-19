@@ -121,7 +121,7 @@
       "Package": "cli",
       "Version": "3.1.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Hash": "da5160e769a652e3ec7111d63883f9bc",
       "Requirements": [
         "glue"
@@ -455,6 +455,17 @@
       "Hash": "cdc87ecd81934679d1557633d8e1fe51",
       "Requirements": []
     },
+    "markdown": {
+      "Package": "markdown",
+      "Version": "1.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "61e4a10781dd00d7d81dd06ca9b94e95",
+      "Requirements": [
+        "mime",
+        "xfun"
+      ]
+    },
     "memoise": {
       "Package": "memoise",
       "Version": "2.0.1",
@@ -517,7 +528,7 @@
       "Package": "pillar",
       "Version": "1.6.5",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Hash": "464a3e015331eeb8efd1d239cad5128d",
       "Requirements": [
         "cli",
@@ -669,7 +680,7 @@
       "Package": "renv",
       "Version": "0.15.2",
       "Source": "Repository",
-      "Repository": "RSPM",
+      "Repository": "CRAN",
       "Hash": "206c4ef8b7ad6fb1060d69aa7b9dfe69",
       "Requirements": []
     },
@@ -677,7 +688,7 @@
       "Package": "rlang",
       "Version": "1.0.0",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Hash": "ec923a35ba44bc86fbf95dacaccf65da",
       "Requirements": []
     },

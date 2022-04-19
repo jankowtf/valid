@@ -9,15 +9,45 @@ valid(
   choices = character(),
   reverse = FALSE,
   flip = FALSE,
-  strict = TRUE
+  strict = TRUE,
+  unname = FALSE
 )
 }
 \arguments{
-\item{strict}{}
+\item{choice}{(\link{character}) Available values}
+
+\item{choices}{(\link{character}) Selection of available values}
+
+\item{reverse}{(\link{logical}) Reverse order yes/no}
+
+\item{flip}{(\link{logical}) Flip names and values yes/no}
+
+\item{strict}{(\link{logical}) Be strict about "things that might go wrong" yes/no}
+
+\item{unname}{(\link{logical}) Drop names yes/no}
 }
 \value{
 
 }
 \description{
-Generic validation function
+Designed to be called \emph{inside} a custom\verb{valid_*} function (e.g. \code{\link[=valid_yes_no]{valid_yes_no()}})
+}
+\examples{
+valid_foo <- function(
+  choice = character(),
+  ...
+) {
+  choices <- letters[1:3]
+
+  names(choices) <- choices \%>\% toupper()
+
+  valid::valid(
+    choice = choice,
+    choices = choices,
+    ...
+  )
+}
+valid_foo()
+valid_foo("a")
+valid_foo("d")
 }

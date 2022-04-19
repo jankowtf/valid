@@ -51,10 +51,10 @@ valid_authentication(2)
 #>   https 
 #> "https"
 try(valid_authentication("I don't exist"))
-#> Error in valid::valid(choice = auth, choices = auths, flip = flip) : 
+#> Error in valid::valid(choice = auth, choices = auths, flip = flip, reverse = reverse) : 
 #>   Invalid choice: valid_authentication("I don't exist")
 try(valid_authentication(3))
-#> Error in valid::valid(choice = auth, choices = auths, flip = flip) : 
+#> Error in valid::valid(choice = auth, choices = auths, flip = flip, reverse = reverse) : 
 #>   Invalid choice: valid_authentication(3)
 
 valid_dep_types()
@@ -64,7 +64,7 @@ valid_dep_types("Suggests")
 #>   Suggests 
 #> "Suggests"
 try(valid_dep_types("I don't exist"))
-#> Error in valid::valid(choice = type, choices = types, flip = flip) : 
+#> Error in valid::valid(choice = type, choices = types, flip = flip, reverse = reverse) : 
 #>   Invalid choice: valid_dep_types("I don't exist")
 
 valid_devops_envs()
@@ -74,7 +74,7 @@ valid_devops_envs("staging")
 #>   staging 
 #> "staging"
 try(valid_devops_envs("I don't exist"))
-#> Error in valid::valid(choice = devops_env, choices = values, reverse = reverse,  : 
+#> Error in valid::valid(choice = devops_env, choices = values, flip = flip,  : 
 #>   Invalid choice: valid_devops_envs("I don't exist")
 
 valid_licenses()
@@ -84,7 +84,7 @@ valid_licenses("mit")
 #>   mit 
 #> "MIT"
 try(valid_licenses("I don't exist"))
-#> Error in valid::valid(choice = license, choices = licenses, flip = flip) : 
+#> Error in valid::valid(choice = license, choices = licenses, flip = flip,  : 
 #>   Invalid choice: valid_licenses("I don't exist")
 ```
 
@@ -109,19 +109,16 @@ You can build your functions on top of `valid::valid()`
 #' Valid devops environments
 #'
 #' @param x [[character]] DevOps environment
-#' @param reverse [[logical]] Reverse order
-#' @param flip [[logical]] Flip values and names
-#' @param strict [[logical]] Throw error if invalid choice or return empty
+#' @param ... Further arguments that will be passed to [valid::valid()]
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' my_valid_devops_envs()
 my_valid_devops_envs <- function(
   x = character(),
-  reverse = FALSE,
-  flip = FALSE,
-  strict = TRUE
+  ...
 ) {
   values <- c("dev", "prod")
   names(values) <- toupper(values)
@@ -129,9 +126,7 @@ my_valid_devops_envs <- function(
   valid(
     choice = x,
     choices = values,
-    reverse = reverse,
-    flip = flip,
-    strict = strict
+    ...
   )
 }
 ```
@@ -156,6 +151,16 @@ my_valid_devops_envs(flip = TRUE)
 #>  "DEV" "PROD"
 ```
 
+``` r
+my_valid_devops_envs(unname = TRUE)
+#> [1] "dev"  "prod"
+```
+
+``` r
+my_valid_devops_envs(flip = TRUE, unname = TRUE)
+#> [1] "DEV"  "PROD"
+```
+
 #### Choice via value
 
 Valid:
@@ -170,7 +175,7 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs("abc"))
-#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#> Error in valid(choice = x, choices = values, ...) : 
 #>   Invalid choice: my_valid_devops_envs("abc")
 ```
 
@@ -195,7 +200,7 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs("ABC"))
-#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#> Error in valid(choice = x, choices = values, ...) : 
 #>   Invalid choice: my_valid_devops_envs("ABC")
 ```
 
@@ -220,7 +225,7 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs(3))
-#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#> Error in valid(choice = x, choices = values, ...) : 
 #>   Invalid choice: my_valid_devops_envs(3)
 ```
 
@@ -267,7 +272,7 @@ try(
     devops_env = my_valid_devops_envs("abc")
   )
 )
-#> Error in valid(choice = x, choices = values, reverse = reverse, flip = flip,  : 
+#> Error in valid(choice = x, choices = values, ...) : 
 #>   Invalid choice: my_valid_devops_envs("abc")
 ```
 

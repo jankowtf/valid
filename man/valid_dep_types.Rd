@@ -4,16 +4,24 @@
 \alias{valid_dep_types}
 \title{Valid dependency types}
 \usage{
-valid_dep_types(type = character(), flip = FALSE)
+valid_dep_types(type = character(), ...)
 }
 \arguments{
 \item{type}{(\link{character}) Dependency type choice}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
 }
 \description{
 Valid dependency types
+}
+\examples{
+valid_dep_types()
+valid_dep_types("Suggests")
+try(valid_dep_types("invalid"))
+valid_dep_types(reverse = TRUE)
+valid_dep_types(flip = TRUE)
+valid_dep_types(unname = TRUE)
 }

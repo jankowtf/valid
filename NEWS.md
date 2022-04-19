@@ -1,17 +1,32 @@
+# valid 0.0.0.9005 (2022-04-19)
+
+Unname
+
+- Added argument to `valid()`: `unname` 
+- Cleaned up roygen code
+- Updated `README.Rmd`
+
+----------
+
 # valid 0.0.0.9004
 
 DevOps environments, reverse, README
 
 - Added `valid_devops_envs()`
 
+----------
 
 # valid 0.0.0.9003
 
 Updated README and new built-in functions
 
+----------
+
 # valid 0.0.0.9002
 
 Changes not recorded
+
+----------
 
 # valid 0.0.0.9001
 
@@ -21,7 +36,7 @@ Renaming
 - Added `test-flip.R`
 - Refactored `README`
 
---------------------------------------------------------------------------------
+----------
 
 # valid 0.0.0.9000
 

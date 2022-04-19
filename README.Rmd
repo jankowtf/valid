@@ -87,19 +87,16 @@ You can build your functions on top of `valid::valid()`
 #' Valid devops environments
 #'
 #' @param x [[character]] DevOps environment
-#' @param reverse [[logical]] Reverse order
-#' @param flip [[logical]] Flip values and names
-#' @param strict [[logical]] Throw error if invalid choice or return empty
+#' @param ... Further arguments that will be passed to [valid::valid()]
 #'
 #' @return
 #' @export
 #'
 #' @examples
+#' my_valid_devops_envs()
 my_valid_devops_envs <- function(
   x = character(),
-  reverse = FALSE,
-  flip = FALSE,
-  strict = TRUE
+  ...
 ) {
   values <- c("dev", "prod")
   names(values) <- toupper(values)
@@ -107,9 +104,7 @@ my_valid_devops_envs <- function(
   valid(
     choice = x,
     choices = values,
-    reverse = reverse,
-    flip = flip,
-    strict = strict
+    ...
   )
 }
 ```
@@ -125,6 +120,12 @@ my_valid_devops_envs(reverse = TRUE)
 ```
 ```{r}
 my_valid_devops_envs(flip = TRUE)
+```
+```{r}
+my_valid_devops_envs(unname = TRUE)
+```
+```{r}
+my_valid_devops_envs(flip = TRUE, unname = TRUE)
 ```
 
 #### Choice via value

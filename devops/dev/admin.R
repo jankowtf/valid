@@ -11,6 +11,7 @@ renv::install("yaml")
 renv::install("htmltools")
 renv::install("rmarkdown")
 renv::install("tinytex")
+renv::install("pdflatex")
 
 # Tests -------------------------------------------------------------------
 

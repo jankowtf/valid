@@ -4,16 +4,24 @@
 \alias{valid_yes_no}
 \title{Valid: yes/no}
 \usage{
-valid_yes_no(choice = character(), flip = FALSE)
+valid_yes_no(choice = character(), ...)
 }
 \arguments{
-\item{choice}{\link{character} Actual choice out of all available choices}
+\item{choice}{(\link{character}) Actual choice out of all available choices}
 
-\item{flip}{(\link{logical}) Flip the vector's order?}
+\item{...}{Further arguments that will be passed to \code{\link[=valid]{valid()}}}
 }
 \value{
 
 }
 \description{
 Valid: yes/no
+}
+\examples{
+valid_yes_no()
+valid_yes_no("yes")
+try(valid_yes_no("invalid"))
+valid_yes_no(reverse = TRUE)
+valid_yes_no(flip = TRUE)
+valid_yes_no(unname = TRUE)
 }
