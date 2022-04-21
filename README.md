@@ -33,6 +33,9 @@ some functionality to make the task a bit easier or at least more fun.
 library(valid)
 ```
 
+The actual workhorse is `valid()` while `valid2()` makes choice input a
+bit more convenient via the `...` mechanism.
+
 ### Built-in functions
 
 There are some built-in functions for typical validation tasks.
@@ -51,10 +54,10 @@ valid_authentication(2)
 #>   https 
 #> "https"
 try(valid_authentication("I don't exist"))
-#> Error in valid::valid(choice = auth, choices = auths, flip = flip, reverse = reverse) : 
+#> Error in valid::valid(choice = auth, choices = auths, ...) : 
 #>   Invalid choice: valid_authentication("I don't exist")
 try(valid_authentication(3))
-#> Error in valid::valid(choice = auth, choices = auths, flip = flip, reverse = reverse) : 
+#> Error in valid::valid(choice = auth, choices = auths, ...) : 
 #>   Invalid choice: valid_authentication(3)
 
 valid_dep_types()
@@ -64,7 +67,7 @@ valid_dep_types("Suggests")
 #>   Suggests 
 #> "Suggests"
 try(valid_dep_types("I don't exist"))
-#> Error in valid::valid(choice = type, choices = types, flip = flip, reverse = reverse) : 
+#> Error in valid::valid(choice = type, choices = types, ...) : 
 #>   Invalid choice: valid_dep_types("I don't exist")
 
 valid_devops_envs()
@@ -74,7 +77,7 @@ valid_devops_envs("staging")
 #>   staging 
 #> "staging"
 try(valid_devops_envs("I don't exist"))
-#> Error in valid::valid(choice = devops_env, choices = values, flip = flip,  : 
+#> Error in valid::valid(choice = devops_env, choices = values, ...) : 
 #>   Invalid choice: valid_devops_envs("I don't exist")
 
 valid_licenses()
@@ -84,7 +87,7 @@ valid_licenses("mit")
 #>   mit 
 #> "MIT"
 try(valid_licenses("I don't exist"))
-#> Error in valid::valid(choice = license, choices = licenses, flip = flip,  : 
+#> Error in valid::valid(choice = license, choices = licenses, ...) : 
 #>   Invalid choice: valid_licenses("I don't exist")
 ```
 
@@ -97,6 +100,8 @@ valid_devops_envs(reverse = TRUE)
 valid_devops_envs(flip = TRUE) # doesn't really make sense in this case as both is lowercase
 #>       dev   staging      prod 
 #>     "dev" "staging"    "prod"
+valid_devops_envs(unname = TRUE)
+#> [1] "dev"     "staging" "prod"
 ```
 
 ### Custom function
@@ -106,27 +111,29 @@ valid_devops_envs(flip = TRUE) # doesn't really make sense in this case as both 
 You can build your functions on top of `valid::valid()`
 
 ``` r
-#' Valid devops environments
-#'
-#' @param x [[character]] DevOps environment
-#' @param ... Further arguments that will be passed to [valid::valid()]
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' my_valid_devops_envs()
 my_valid_devops_envs <- function(
   x = character(),
   ...
 ) {
-  values <- c("dev", "prod")
-  names(values) <- toupper(values)
+  choices <- c("dev", "staging", "prod")
+  names(choices) <- toupper(choices)
 
   valid(
     choice = x,
-    choices = values,
+    choices = choices,
     ...
+  )
+}
+
+my_valid_devops_envs2 <- function(
+  ...
+) {
+  choices <- c("dev", "staging", "prod")
+  names(choices) <- toupper(choices)
+
+  valid2(
+    ...,
+    .choices = choices
   )
 }
 ```
@@ -135,55 +142,30 @@ my_valid_devops_envs <- function(
 
 ``` r
 my_valid_devops_envs()
-#>    DEV   PROD 
-#>  "dev" "prod"
+#>       DEV   STAGING      PROD 
+#>     "dev" "staging"    "prod"
 ```
 
 ``` r
 my_valid_devops_envs(reverse = TRUE)
-#>   PROD    DEV 
-#> "prod"  "dev"
+#>      PROD   STAGING       DEV 
+#>    "prod" "staging"     "dev"
 ```
 
 ``` r
 my_valid_devops_envs(flip = TRUE)
-#>    dev   prod 
-#>  "DEV" "PROD"
+#>       dev   staging      prod 
+#>     "DEV" "STAGING"    "PROD"
 ```
 
 ``` r
 my_valid_devops_envs(unname = TRUE)
-#> [1] "dev"  "prod"
+#> [1] "dev"     "staging" "prod"
 ```
 
 ``` r
 my_valid_devops_envs(flip = TRUE, unname = TRUE)
-#> [1] "DEV"  "PROD"
-```
-
-#### Choice via value
-
-Valid:
-
-``` r
-my_valid_devops_envs("dev")
-#>   DEV 
-#> "dev"
-```
-
-Invalid:
-
-``` r
-try(my_valid_devops_envs("abc"))
-#> Error in valid(choice = x, choices = values, ...) : 
-#>   Invalid choice: my_valid_devops_envs("abc")
-```
-
-Invalid but non-strict:
-
-``` r
-my_valid_devops_envs("abc", strict = FALSE)
-#> named character(0)
+#> [1] "DEV"     "STAGING" "PROD"
 ```
 
 #### Choice via name
@@ -196,19 +178,98 @@ my_valid_devops_envs("PROD")
 #> "prod"
 ```
 
+``` r
+my_valid_devops_envs(c("STAGING", "PROD"))
+#>   STAGING      PROD 
+#> "staging"    "prod"
+my_valid_devops_envs2("STAGING", "PROD")
+#>   STAGING      PROD 
+#> "staging"    "prod"
+```
+
 Invalid:
 
 ``` r
 try(my_valid_devops_envs("ABC"))
-#> Error in valid(choice = x, choices = values, ...) : 
+#> Error in valid(choice = x, choices = choices, ...) : 
 #>   Invalid choice: my_valid_devops_envs("ABC")
 ```
-
-Invalid but non-strict:
 
 ``` r
 my_valid_devops_envs("ABC", strict = FALSE)
 #> named character(0)
+```
+
+Partially invalid:
+
+``` r
+try(my_valid_devops_envs(x = c("DEV", "ABC")))
+#> Error in valid(choice = x, choices = choices, ...) : 
+#>   Invalid choice: my_valid_devops_envs("ABC")
+try(my_valid_devops_envs2("DEV", "ABC"))
+#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
+#>   Invalid choice: my_valid_devops_envs2("ABC")
+```
+
+``` r
+my_valid_devops_envs(x = c("DEV", "ABC"), strict = FALSE)
+#>   DEV 
+#> "dev"
+my_valid_devops_envs2("DEV", "ABC", .strict = FALSE)
+#>   DEV 
+#> "dev"
+```
+
+#### Choice via value
+
+Valid:
+
+``` r
+my_valid_devops_envs("dev")
+#>   DEV 
+#> "dev"
+```
+
+``` r
+my_valid_devops_envs(c("dev", "staging"))
+#>       DEV   STAGING 
+#>     "dev" "staging"
+my_valid_devops_envs2("dev", "staging")
+#>       DEV   STAGING 
+#>     "dev" "staging"
+```
+
+Invalid:
+
+``` r
+try(my_valid_devops_envs("abc"))
+#> Error in valid(choice = x, choices = choices, ...) : 
+#>   Invalid choice: my_valid_devops_envs("abc")
+```
+
+``` r
+my_valid_devops_envs("abc", strict = FALSE)
+#> named character(0)
+```
+
+Partially invalid
+
+``` r
+try(my_valid_devops_envs(c("dev", "abc")))
+#> Error in valid(choice = x, choices = choices, ...) : 
+#>   Invalid choice: my_valid_devops_envs("abc")
+try(my_valid_devops_envs2("dev", "abc"))
+#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
+#>   Invalid choice: my_valid_devops_envs2("abc")
+```
+
+``` r
+my_valid_devops_envs(c("dev", "abc"), strict = FALSE)
+#>   DEV 
+#> "dev"
+my_valid_devops_envs2("dev", "abc", .strict = FALSE)
+#>   DEV 
+#> "dev"
 ```
 
 #### Choice via index/position
@@ -217,33 +278,60 @@ Valid:
 
 ``` r
 my_valid_devops_envs(2)
-#>   PROD 
-#> "prod"
+#>   STAGING 
+#> "staging"
+```
+
+``` r
+my_valid_devops_envs(c(2, 3))
+#>   STAGING      PROD 
+#> "staging"    "prod"
+my_valid_devops_envs2(2, 3)
+#>   STAGING      PROD 
+#> "staging"    "prod"
 ```
 
 Invalid:
 
 ``` r
-try(my_valid_devops_envs(3))
-#> Error in valid(choice = x, choices = values, ...) : 
-#>   Invalid choice: my_valid_devops_envs(3)
+try(my_valid_devops_envs(4))
+#> Error in valid(choice = x, choices = choices, ...) : 
+#>   Invalid choice: my_valid_devops_envs(4)
 ```
 
-Invalid but non-strict:
+``` r
+my_valid_devops_envs(4, strict = FALSE)
+#> named character(0)
+```
+
+Partially invalid:
 
 ``` r
-my_valid_devops_envs(3, strict = FALSE)
-#> named character(0)
+try(my_valid_devops_envs(x = c(1, 4)))
+#> Error in valid(choice = x, choices = choices, ...) : 
+#>   Invalid choice: my_valid_devops_envs(4)
+try(my_valid_devops_envs2(1, 4))
+#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
+#>   Invalid choice: my_valid_devops_envs2(4)
+```
+
+``` r
+my_valid_devops_envs(x = c(1, 4), strict = FALSE)
+#>   DEV 
+#> "dev"
+my_valid_devops_envs2(1, 4, .strict = FALSE)
+#>   DEV 
+#> "dev"
 ```
 
 ### Use validation function inside of another function
 
 ``` r
 foo <- function(
-  devops_env = my_valid_devops_envs("dev")
+  devops_env = my_valid_devops_envs2("dev")
 ) {
   # Input validation
-  devops_env <- match.arg(devops_env, my_valid_devops_envs())
+  devops_env <- match.arg(devops_env, my_valid_devops_envs2())
   
   # Body
   stringr::str_glue("DevOps env: {stringr::str_c(devops_env, collapse = ', ')}")
@@ -261,7 +349,7 @@ foo()
 
 ``` r
 foo(
-  devops_env = my_valid_devops_envs("dev")
+  devops_env = my_valid_devops_envs2("dev")
 )
 #> DevOps env: dev
 ```
@@ -269,11 +357,21 @@ foo(
 ``` r
 try(
   foo(
-    devops_env = my_valid_devops_envs("abc")
+    devops_env = my_valid_devops_envs2("abc")
   )
 )
-#> Error in valid(choice = x, choices = values, ...) : 
-#>   Invalid choice: my_valid_devops_envs("abc")
+#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
+#>   Invalid choice: my_valid_devops_envs2("abc")
+```
+
+``` r
+try(
+  foo(
+    devops_env = my_valid_devops_envs2("dev", "abc")
+  )
+)
+#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
+#>   Invalid choice: my_valid_devops_envs2("abc")
 ```
 
 #### Lazy input validation
@@ -291,8 +389,8 @@ try(
     devops_env = "abc"
   )
 )
-#> Error in match.arg(devops_env, my_valid_devops_envs()) : 
-#>   'arg' should be one of "dev", "prod"
+#> Error in match.arg(devops_env, my_valid_devops_envs2()) : 
+#>   'arg' should be one of "dev", "staging", "prod"
 ```
 
 ## Code of Conduct

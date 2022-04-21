@@ -1,3 +1,15 @@
+# valid 0.0.0.9006 (2022-04-21)
+
+valid2
+
+- Added `valid2()`
+- Refactored internal case logic in `valid()`. Might hurt performance a bit but I feel more comfortable with "less guessing"
+- New Case logic handling depends on two new functions:
+    - `handle_choice_type()`
+    - `handle_valid_invalid()`
+
+----------
+
 # valid 0.0.0.9005 (2022-04-19)
 
 Unname

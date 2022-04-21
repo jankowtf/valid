@@ -36,7 +36,7 @@ test_that("No choice: flip", {
 
 # Value choice ------------------------------------------------------------
 
-test_that("Choice: value: valid", {
+test_that("Choice: value", {
   result <- valid(
     choice = letters[1],
     choices = letters[1:3]
@@ -70,7 +70,7 @@ test_that("Choice: value: invalid: non-strict", {
 
 # Index choice ------------------------------------------------------------
 
-test_that("Choice: value: index", {
+test_that("Choice: index", {
   result <- valid(
     choice = 1,
     choices = letters[1:3]

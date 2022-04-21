@@ -44,6 +44,9 @@ functionality to make the task a bit easier or at least more fun.
 library(valid)
 ```
 
+The actual workhorse is `valid()` while `valid2()` makes choice input a bit more
+convenient via the `...` mechanism.
+
 ### Built-in functions
 
 There are some built-in functions for typical validation tasks.
@@ -75,6 +78,7 @@ You can reverse the order or flip names and values
 ```{r}
 valid_devops_envs(reverse = TRUE)
 valid_devops_envs(flip = TRUE) # doesn't really make sense in this case as both is lowercase
+valid_devops_envs(unname = TRUE)
 ```
 
 ### Custom function
@@ -84,27 +88,29 @@ valid_devops_envs(flip = TRUE) # doesn't really make sense in this case as both 
 You can build your functions on top of `valid::valid()` 
 
 ```{r}
-#' Valid devops environments
-#'
-#' @param x [[character]] DevOps environment
-#' @param ... Further arguments that will be passed to [valid::valid()]
-#'
-#' @return
-#' @export
-#'
-#' @examples
-#' my_valid_devops_envs()
 my_valid_devops_envs <- function(
   x = character(),
   ...
 ) {
-  values <- c("dev", "prod")
-  names(values) <- toupper(values)
+  choices <- c("dev", "staging", "prod")
+  names(choices) <- toupper(choices)
 
   valid(
     choice = x,
-    choices = values,
+    choices = choices,
     ...
+  )
+}
+
+my_valid_devops_envs2 <- function(
+  ...
+) {
+  choices <- c("dev", "staging", "prod")
+  names(choices) <- toupper(choices)
+
+  valid2(
+    ...,
+    .choices = choices
   )
 }
 ```
@@ -128,25 +134,6 @@ my_valid_devops_envs(unname = TRUE)
 my_valid_devops_envs(flip = TRUE, unname = TRUE)
 ```
 
-#### Choice via value
-
-Valid:
-
-```{r}
-my_valid_devops_envs("dev")
-```
-Invalid:
-
-```{r}
-try(my_valid_devops_envs("abc"))
-```
-
-Invalid but non-strict:
-
-```{r}
-my_valid_devops_envs("abc", strict = FALSE)
-```
-
 #### Choice via name
 
 Valid:
@@ -155,16 +142,66 @@ Valid:
 my_valid_devops_envs("PROD")
 ```
 
+```{r}
+my_valid_devops_envs(c("STAGING", "PROD"))
+my_valid_devops_envs2("STAGING", "PROD")
+```
+
 Invalid:
 
 ```{r}
 try(my_valid_devops_envs("ABC"))
 ```
 
-Invalid but non-strict:
-
 ```{r}
 my_valid_devops_envs("ABC", strict = FALSE)
+```
+
+Partially invalid: 
+
+```{r}
+try(my_valid_devops_envs(x = c("DEV", "ABC")))
+try(my_valid_devops_envs2("DEV", "ABC"))
+```
+
+```{r}
+my_valid_devops_envs(x = c("DEV", "ABC"), strict = FALSE)
+my_valid_devops_envs2("DEV", "ABC", .strict = FALSE)
+```
+
+#### Choice via value
+
+Valid:
+
+```{r}
+my_valid_devops_envs("dev")
+```
+
+```{r}
+my_valid_devops_envs(c("dev", "staging"))
+my_valid_devops_envs2("dev", "staging")
+```
+
+Invalid:
+
+```{r}
+try(my_valid_devops_envs("abc"))
+```
+
+```{r}
+my_valid_devops_envs("abc", strict = FALSE)
+```
+
+Partially invalid
+
+```{r}
+try(my_valid_devops_envs(c("dev", "abc")))
+try(my_valid_devops_envs2("dev", "abc"))
+```
+
+```{r}
+my_valid_devops_envs(c("dev", "abc"), strict = FALSE)
+my_valid_devops_envs2("dev", "abc", .strict = FALSE)
 ```
 
 #### Choice via index/position
@@ -175,26 +212,41 @@ Valid:
 my_valid_devops_envs(2)
 ```
 
+```{r}
+my_valid_devops_envs(c(2, 3))
+my_valid_devops_envs2(2, 3)
+```
+
 Invalid:
 
 ```{r}
-try(my_valid_devops_envs(3))
+try(my_valid_devops_envs(4))
 ```
 
-Invalid but non-strict:
+```{r}
+my_valid_devops_envs(4, strict = FALSE)
+```
+
+Partially invalid: 
 
 ```{r}
-my_valid_devops_envs(3, strict = FALSE)
+try(my_valid_devops_envs(x = c(1, 4)))
+try(my_valid_devops_envs2(1, 4))
+```
+
+```{r}
+my_valid_devops_envs(x = c(1, 4), strict = FALSE)
+my_valid_devops_envs2(1, 4, .strict = FALSE)
 ```
 
 ### Use validation function inside of another function
 
 ```{r}
 foo <- function(
-  devops_env = my_valid_devops_envs("dev")
+  devops_env = my_valid_devops_envs2("dev")
 ) {
   # Input validation
-  devops_env <- match.arg(devops_env, my_valid_devops_envs())
+  devops_env <- match.arg(devops_env, my_valid_devops_envs2())
   
   # Body
   stringr::str_glue("DevOps env: {stringr::str_c(devops_env, collapse = ', ')}")
@@ -211,14 +263,22 @@ foo()
 
 ```{r}
 foo(
-  devops_env = my_valid_devops_envs("dev")
+  devops_env = my_valid_devops_envs2("dev")
 )
 ```
 
 ```{r}
 try(
   foo(
-    devops_env = my_valid_devops_envs("abc")
+    devops_env = my_valid_devops_envs2("abc")
+  )
+)
+```
+
+```{r}
+try(
+  foo(
+    devops_env = my_valid_devops_envs2("dev", "abc")
   )
 )
 ```

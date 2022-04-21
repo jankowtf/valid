@@ -21,19 +21,19 @@ test_that("Foo", {
   expect_identical(result, expected)
 })
 
-test_that("Reverse", {
+test_that("Foo: reverse", {
   result <- valid_foo(reverse = TRUE)
   expected <- c(C = "c", B = "b", A = "a")
   expect_identical(result, expected)
 })
 
-test_that("Flip", {
+test_that("Foo: flip", {
   result <- valid_foo(flip = TRUE)
   expected <- c(a = "A", b = "B", c = "C")
   expect_identical(result, expected)
 })
 
-test_that("Unname", {
+test_that("Foo: unname", {
   result <- valid_foo(unname = TRUE)
   expected <- c("a", "b", "c")
   expect_identical(result, expected)

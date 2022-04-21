@@ -3,6 +3,7 @@
 export("%>%")
 export(is_answer_true_false)
 export(valid)
+export(valid2)
 export(valid_again_exit)
 export(valid_authentication)
 export(valid_dep_types)

@@ -8,6 +8,7 @@
 #' @param flip ([logical]) Flip names and values yes/no
 #' @param strict ([logical]) Be strict about "things that might go wrong" yes/no
 #' @param unname ([logical]) Drop names yes/no
+#' @param call ([call]) Enclosing call
 #'
 #' @return
 #' @export
@@ -28,63 +29,149 @@
 #'   )
 #' }
 #' valid_foo()
+#' # Via name
+#' valid_foo("A")
+#' valid_foo("A", "C")
+#' # Via value
 #' valid_foo("a")
+#' valid_foo("a", "c")
+#' # Handling obvious errors
+#' try(valid_foo("D"))
 #' try(valid_foo("d"))
+#' # Handling partial errors
+#' try(valid_foo("A", "D"))
+#' try(valid_foo("A", "D", .strict = FALSE))
+#' try(valid_foo("a", "d"))
+#' try(valid_foo("a", "d", .strict = FALSE))
 valid <- function(
-  choice = character(),
-  choices = character(),
-  reverse = FALSE,
-  flip = FALSE,
-  strict = TRUE,
-  unname = FALSE
+    choice = character(),
+    choices = character(),
+    reverse = FALSE,
+    flip = FALSE,
+    strict = TRUE,
+    unname = FALSE,
+    call = sys.call(-1)[[1]]
 ) {
-  out <- if (length(choice)) {
-    # if (choice %in% names(choices)) {
-    #   choices[choice]
-    # }
+    # Choose
+    out <- if (length(choice)) {
+        choice_type <- handle_choice_type(
+            choice = choice,
+            choices = choices
+        )
 
-    # Try via names
-    out <- choices[choice]
-    if (any(is.na(out))) {
-      # Try via element matching
-      out <- choices[choices == choice]
+        valid_invalid <- handle_valid_invalid(
+            choice = choice,
+            choices = choices,
+            choice_type = choice_type
+        )
+        valid <- valid_invalid$valid
+        invalid <- valid_invalid$invalid
+
+        # Inform about invalid choices
+        if (length(invalid) && strict) {
+            stop("Invalid choice: {call}({deparse(invalid)})" %>%
+                    stringr::str_glue())
+        }
+
+        valid
+    } else {
+        choices
     }
+
+    # Reverse
+    out <- if (!reverse) {
+        out
+    } else {
+        rev(out)
+    }
+
+    # Flip
+    out <- if (!flip) {
+        out
+    } else {
+        # Flip names and values
+        out <- flip_values_and_names(out)
+    }
+
+    # Strict yes/no
+    if (!length(out) && strict) {
+        stop("Invalid choice: {call}({deparse(choice)})" %>%
+                stringr::str_glue())
+    }
+
+    # Unname
+    out <- if (unname) {
+        out %>% unname()
+    } else {
+        out
+    }
+
     out
-  } else {
-    choices
-  }
+}
 
-  # Reverse
-  out <- if (!reverse) {
-    out
-  } else {
-    rev(out)
-  }
+#' Alternative generic validation function
+#'
+#' Designed to be called *inside* a custom`valid_*` function (e.g. [valid_yes_no()])
+#'
+#' @param ... ([character]) Selection of available values
+#' @param .choices ([character]) Available values
+#' @param .reverse ([logical]) Reverse order yes/no
+#' @param .flip ([logical]) Flip names and values yes/no
+#' @param .strict ([logical]) Be strict about "things that might go wrong" yes/no
+#' @param .unname ([logical]) Drop names yes/no
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' valid_foo <- function(
+#'   ...
+#' ) {
+#'   choices <- letters[1:3]
+#'
+#'   names(choices) <- choices %>% toupper()
+#'
+#'   valid::valid2(
+#'     ...,
+#'     .choices = choices
+#'   )
+#' }
+#' valid_foo()
+#' # Via name
+#' valid_foo("A")
+#' valid_foo("A", "C")
+#' # Via value
+#' valid_foo("a")
+#' valid_foo("a", "c")
+#' # Handling obvious errors
+#' try(valid_foo("D"))
+#' try(valid_foo("d"))
+#' # Handling partial errors
+#' try(valid_foo("A", "D"))
+#' try(valid_foo("A", "D", .strict = FALSE))
+#' try(valid_foo("a", "d"))
+#' try(valid_foo("a", "d", .strict = FALSE))
+valid2 <- function(
+    ...,
+    .choices = character(),
+    .reverse = FALSE,
+    .flip = FALSE,
+    .strict = TRUE,
+    .unname = FALSE
+) {
+    choice <- rlang::list2(...) %>% unlist()
 
-  # Flip
-  out <- if (!flip) {
-    out
-  } else {
-    # Flip names and values
-    out <- flip_values_and_names(out)
-  }
-
-
-  # Strict yes/no
-  if (!length(out) && strict) {
     call <- as.character(sys.call(-1)[[1]])
-    stop("Invalid choice: {call}({deparse(choice)})" %>%
-        stringr::str_glue())
-  }
 
-  # Unname
-  out <- if (unname) {
-    out %>% unname()
-  } else {
-    out
-  }
-
-  out
+    return(valid(
+        choice = choice,
+        choices = .choices,
+        reverse = .reverse,
+        flip = .flip,
+        strict = .strict,
+        unname = .unname,
+        call = call
+    ))
 }
 
 # Helpers ------------------------------------------------------------------
@@ -95,10 +182,10 @@ valid <- function(
 #'
 #' @return Same structure as before, but names as values and values as names
 flip_values_and_names <- function(x) {
-  names <- x
-  x <- names(x)
-  names(x) <- names
-  x
+    names <- x
+    x <- names(x)
+    names(x) <- names
+    x
 }
 
 #' Is answer really TRUE or FALSE?
@@ -108,13 +195,13 @@ flip_values_and_names <- function(x) {
 #' @return
 #' @export
 is_answer_true_false <- function(answer) {
-  # answer %>%
-  #   not_in(
-  #     c(valid_again_exit(flip = TRUE), valid_none(flip = TRUE))
-  #   )
+    # answer %>%
+    #   not_in(
+    #     c(valid_again_exit(flip = TRUE), valid_none(flip = TRUE))
+    #   )
 
-  answer %>%
-    `%in%`(valid_yes_no(flip = TRUE))
+    answer %>%
+        `%in%`(valid_yes_no(flip = TRUE))
 }
 
 #' Check if not in set
@@ -124,7 +211,7 @@ is_answer_true_false <- function(answer) {
 #'
 #' @return ([logical(1)])
 not_in <- function(x, set) {
-  !(x %in% set)
+    !(x %in% set)
 }
 
 # Answers to choices ------------------------------------------------------
@@ -145,17 +232,17 @@ not_in <- function(x, set) {
 #' valid_yes_no(flip = TRUE)
 #' valid_yes_no(unname = TRUE)
 valid_yes_no <- function(
-  choice = character(),
-  ...
-) {
-  valid::valid(
-    choice = choice,
-    choices = c(
-      yes = "Yes",
-      no = "No"
-    ),
+    choice = character(),
     ...
-  )
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            yes = "Yes",
+            no = "No"
+        ),
+        ...
+    )
 }
 
 #' Valid: again/exit
@@ -173,17 +260,17 @@ valid_yes_no <- function(
 #' valid_again_exit(flip = TRUE)
 #' valid_again_exit(unname = TRUE)
 valid_again_exit <- function(
-  choice = character(),
-  ...
-) {
-  valid::valid(
-    choice = choice,
-    choices = c(
-      again = "Let me start over",
-      exit = "Exit"
-    ),
+    choice = character(),
     ...
-  )
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            again = "Let me start over",
+            exit = "Exit"
+        ),
+        ...
+    )
 }
 
 #' Valid: none
@@ -201,16 +288,16 @@ valid_again_exit <- function(
 #' valid_none(flip = TRUE)
 #' valid_none(unname = TRUE)
 valid_none <- function(
-  choice = character(),
-  ...
-) {
-  valid::valid(
-    choice = choice,
-    choices = c(
-      none = "None"
-    ),
+    choice = character(),
     ...
-  )
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            none = "None"
+        ),
+        ...
+    )
 }
 
 #' Valid: yes/no/again/exit
@@ -228,17 +315,17 @@ valid_none <- function(
 #' valid_yes_no_again_exit(flip = TRUE)
 #' valid_yes_no_again_exit(unname = TRUE)
 valid_yes_no_again_exit <- function(
-  choice = character(),
-  ...
-) {
-  valid::valid(
-    choice = choice,
-    choices = c(
-      valid_yes_no(),
-      valid_again_exit()
-    ),
+    choice = character(),
     ...
-  )
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            valid_yes_no(),
+            valid_again_exit()
+        ),
+        ...
+    )
 }
 
 # Authentication ----------------------------------------------------------
@@ -258,16 +345,16 @@ valid_yes_no_again_exit <- function(
 #' valid_authentication(flip = TRUE)
 #' valid_authentication(unname = TRUE)
 valid_authentication <- function(
-  auth = character(),
-  ...
-) {
-  auths <- c("ssh", "https")
-  names(auths) <- auths
-  valid::valid(
-    choice = auth,
-    choices = auths,
+    auth = character(),
     ...
-  )
+) {
+    auths <- c("ssh", "https")
+    names(auths) <- auths
+    valid::valid(
+        choice = auth,
+        choices = auths,
+        ...
+    )
 }
 
 # DevOps environments -----------------------------------------------------
@@ -287,17 +374,17 @@ valid_authentication <- function(
 #' valid_devops_envs(flip = TRUE)
 #' valid_devops_envs(unname = TRUE)
 valid_devops_envs <- function(
-  devops_env = character(),
-  ...
-) {
-  values <- c("dev", "staging", "prod")
-  names(values) <- values
-
-  valid::valid(
-    choice = devops_env,
-    choices = values,
+    devops_env = character(),
     ...
-  )
+) {
+    values <- c("dev", "staging", "prod")
+    names(values) <- values
+
+    valid::valid(
+        choice = devops_env,
+        choices = values,
+        ...
+    )
 }
 
 # Licenses ----------------------------------------------------------------
@@ -316,17 +403,17 @@ valid_devops_envs <- function(
 #' valid_licenses(flip = TRUE)
 #' valid_licenses(unname = TRUE)
 valid_licenses <- function(
-  license = character(),
-  ...
-) {
-  licenses <- c("GPL v3", "MIT", "CC0", "CCBY 4.0", "LGPL v3", "APL 2.0", "AGPL v3")
-  names <- c("gpl3", "mit", "cc0", "ccby", "lgpl", "apl2", "agpl3")
-  names(licenses) <- names
-  valid::valid(
-    choice = license,
-    choices = licenses,
+    license = character(),
     ...
-  )
+) {
+    licenses <- c("GPL v3", "MIT", "CC0", "CCBY 4.0", "LGPL v3", "APL 2.0", "AGPL v3")
+    names <- c("gpl3", "mit", "cc0", "ccby", "lgpl", "apl2", "agpl3")
+    names(licenses) <- names
+    valid::valid(
+        choice = license,
+        choices = licenses,
+        ...
+    )
 }
 
 # Package dependencies ----------------------------------------------------
@@ -346,14 +433,14 @@ valid_licenses <- function(
 #' valid_dep_types(flip = TRUE)
 #' valid_dep_types(unname = TRUE)
 valid_dep_types <- function(
-  type = character(),
-  ...
-) {
-  types <- c("Suggests", "Imports", "Depends", "Enhances", "LinkingTo")
-  names(types) <- types
-  valid::valid(
-    choice = type,
-    choices = types,
+    type = character(),
     ...
-  )
+) {
+    types <- c("Suggests", "Imports", "Depends", "Enhances", "LinkingTo")
+    names(types) <- types
+    valid::valid(
+        choice = type,
+        choices = types,
+        ...
+    )
 }
