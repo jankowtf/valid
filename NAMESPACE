@@ -2,6 +2,7 @@
 
 export("%>%")
 export(is_answer_true_false)
+export(is_valid)
 export(valid)
 export(valid2)
 export(valid_again_exit)

@@ -19,6 +19,7 @@ usethis::use_test("valid_generic")
 usethis::use_test("valid_example")
 usethis::use_test("flip")
 usethis::use_test("valids")
+usethis::use_test("is_valid")
 
 # Dev notebook ------------------------------------------------------------
 

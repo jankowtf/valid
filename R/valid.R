@@ -174,6 +174,30 @@ valid2 <- function(
     ))
 }
 
+#' Is valid
+#'
+#' Convenience wrapper around using a `valid_*` function directly
+#'
+#' @param x [[chacter] or [integer]] A valid choice
+#' @param valid_fn [[function]] The actual validation function
+#' @param ... Additional arguments passed to `valid_fn`
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' is_valid("yes", valid_yes_no)
+#' is_valid(c("yes", "no"), valid_yes_no)
+#' try(is_valid("YES", valid_yes_no))
+#' is_valid(c("yes", "NO"), valid_yes_no)
+is_valid <- function(
+    x,
+    valid_fn,
+    ...
+) {
+    valid_fn(x, ...)
+}
+
 # Helpers ------------------------------------------------------------------
 
 #' Flip values and names
