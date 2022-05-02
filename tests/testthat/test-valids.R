@@ -61,6 +61,15 @@ test_that("Yes/no", {
   result <- valid_yes_no()
   expected <- structure(c("Yes", "No"), names = c("yes", "no"))
   expect_identical(result, expected)
+
+  result <- valid_yes_no("Yes")
+  expected <- c("yes" = "Yes")
+  expect_identical(result, expected)
+
+  expect_error(valid_yes_no("YES"))
+  result <- valid_yes_no(c("Yes", "NO"), strict = FALSE)
+  expected <- c("yes" = "Yes")
+  expect_identical(result, expected)
 })
 
 # Again/exit --------------------------------------------------------------

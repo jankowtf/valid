@@ -1,3 +1,12 @@
+# valid 0.0.0.9008 (2022-05-02)
+
+Better messages for invalid choices
+
+- Added `handle_message()`
+- `handle_message()` is used in `valid()` in case of invalid choices
+
+----------
+
 # valid 0.0.0.9007 (2022-04-30)
 
 is_valid
@@ -5,6 +14,7 @@ is_valid
 - Added `is_valid()`
 
 ----------
+
 # valid 0.0.0.9006 (2022-04-21)
 
 valid2

@@ -67,11 +67,13 @@ valid <- function(
         valid <- valid_invalid$valid
         invalid <- valid_invalid$invalid
 
-        # Inform about invalid choices
-        if (length(invalid) && strict) {
-            stop("Invalid choice: {call}({deparse(invalid)})" %>%
-                    stringr::str_glue())
-        }
+        handle_message(
+            valid = valid,
+            invalid = invalid,
+            choices = choices,
+            call = call,
+            strict = strict
+        )
 
         valid
     } else {
@@ -197,6 +199,39 @@ is_valid <- function(
 ) {
     valid_fn(x, ...)
 }
+
+handle_message <- function(
+    valid,
+    invalid,
+    choices,
+    call,
+    strict
+) {
+    if (length(invalid)) {
+        msg_valid <- c(
+            "Valid choices:",
+            choices
+        ) %>% stringr::str_c("\n")
+
+        msg_choice <- c(
+            "Your choice:",
+            c(valid, invalid)
+        ) %>% stringr::str_c("\n")
+
+        msg <- "Invalid choice: {call}({deparse(invalid)})" %>%
+            stringr::str_glue()
+        if (strict) {
+            message(msg_choice)
+            message(msg_valid)
+            stop(msg, call. = FALSE)
+        } else {
+            warning(msg, call. = FALSE)
+            message(msg_choice)
+            message(msg_valid)
+        }
+    }
+}
+
 
 # Helpers ------------------------------------------------------------------
 
