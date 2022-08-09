@@ -304,6 +304,35 @@ valid_yes_no <- function(
     )
 }
 
+#' Valid: keep/reset
+#'
+#' @param choice ([character]) Actual choice out of all available choices
+#' @param ... Further arguments that will be passed to [valid::valid()]
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' valid_keep_reset()
+#' valid_keep_reset("keep")
+#' try(valid_keep_reset("invalid"))
+#' valid_keep_reset(reverse = TRUE)
+#' valid_keep_reset(flip = TRUE)
+#' valid_keep_reset(unname = TRUE)
+valid_keep_reset <- function(
+    choice = character(),
+    ...
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            keep = "Keep",
+            reset = "Reset"
+        ),
+        ...
+    )
+}
+
 #' Valid: again/exit
 #'
 #' @param choice ([character]) Selection from available valid choices
@@ -381,6 +410,34 @@ valid_yes_no_again_exit <- function(
         choice = choice,
         choices = c(
             valid_yes_no(),
+            valid_again_exit()
+        ),
+        ...
+    )
+}
+
+#' Valid: keep/reset/again/exit
+#'
+#' @param choice ([character]) Selection from available valid choices
+#' @param ... Further arguments that will be passed to [valid::valid()]
+#'
+#' @return
+#' @export
+#' @examples
+#' valid_keep_reset_again_exit()
+#' valid_keep_reset_again_exit("yes")
+#' try(valid_keep_reset_again_exit("invalid"))
+#' valid_keep_reset_again_exit(reverse = TRUE)
+#' valid_keep_reset_again_exit(flip = TRUE)
+#' valid_keep_reset_again_exit(unname = TRUE)
+valid_keep_reset_again_exit <- function(
+    choice = character(),
+    ...
+) {
+    valid::valid(
+        choice = choice,
+        choices = c(
+            valid_keep_reset(),
             valid_again_exit()
         ),
         ...

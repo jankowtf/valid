@@ -54,11 +54,20 @@ valid_authentication(2)
 #>   https 
 #> "https"
 try(valid_authentication("I don't exist"))
-#> Error in valid::valid(choice = auth, choices = auths, ...) : 
-#>   Invalid choice: valid_authentication("I don't exist")
+#> Your choice:
+#> I don't exist
+#> Valid choices:
+#> ssh
+#> https
+#> Error : Invalid choice: valid_authentication("I don't exist")
 try(valid_authentication(3))
-#> Error in valid::valid(choice = auth, choices = auths, ...) : 
-#>   Invalid choice: valid_authentication(3)
+#> Your choice:
+#> 3
+#> 
+#> Valid choices:
+#> ssh
+#> https
+#> Error : Invalid choice: valid_authentication(3)
 
 valid_dep_types()
 #>    Suggests     Imports     Depends    Enhances   LinkingTo 
@@ -67,8 +76,15 @@ valid_dep_types("Suggests")
 #>   Suggests 
 #> "Suggests"
 try(valid_dep_types("I don't exist"))
-#> Error in valid::valid(choice = type, choices = types, ...) : 
-#>   Invalid choice: valid_dep_types("I don't exist")
+#> Your choice:
+#> I don't exist
+#> Valid choices:
+#> Suggests
+#> Imports
+#> Depends
+#> Enhances
+#> LinkingTo
+#> Error : Invalid choice: valid_dep_types("I don't exist")
 
 valid_devops_envs()
 #>       dev   staging      prod 
@@ -77,8 +93,13 @@ valid_devops_envs("staging")
 #>   staging 
 #> "staging"
 try(valid_devops_envs("I don't exist"))
-#> Error in valid::valid(choice = devops_env, choices = values, ...) : 
-#>   Invalid choice: valid_devops_envs("I don't exist")
+#> Your choice:
+#> I don't exist
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: valid_devops_envs("I don't exist")
 
 valid_licenses()
 #>       gpl3        mit        cc0       ccby       lgpl       apl2      agpl3 
@@ -87,8 +108,33 @@ valid_licenses("mit")
 #>   mit 
 #> "MIT"
 try(valid_licenses("I don't exist"))
-#> Error in valid::valid(choice = license, choices = licenses, ...) : 
-#>   Invalid choice: valid_licenses("I don't exist")
+#> Your choice:
+#> I don't exist
+#> Valid choices:
+#> GPL v3
+#> MIT
+#> CC0
+#> CCBY 4.0
+#> LGPL v3
+#> APL 2.0
+#> AGPL v3
+#> Error : Invalid choice: valid_licenses("I don't exist")
+
+valid_yes_no()
+#>   yes    no 
+#> "Yes"  "No"
+valid_again_exit()
+#>               again                exit 
+#> "Let me start over"              "Exit"
+valid_yes_no_again_exit()
+#>                 yes                  no               again                exit 
+#>               "Yes"                "No" "Let me start over"              "Exit"
+valid_keep_reset()
+#>    keep   reset 
+#>  "Keep" "Reset"
+valid_keep_reset_again_exit()
+#>                keep               reset               again                exit 
+#>              "Keep"             "Reset" "Let me start over"              "Exit"
 ```
 
 You can reverse the order or flip names and values
@@ -191,12 +237,24 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs("ABC"))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs("ABC")
+#> Your choice:
+#> ABC
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs("ABC")
 ```
 
 ``` r
 my_valid_devops_envs("ABC", strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs("ABC")
+#> Your choice:
+#> ABC
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #> named character(0)
 ```
 
@@ -204,18 +262,48 @@ Partially invalid:
 
 ``` r
 try(my_valid_devops_envs(x = c("DEV", "ABC")))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs("ABC")
+#> Your choice:
+#> dev
+#> ABC
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs("ABC")
 try(my_valid_devops_envs2("DEV", "ABC"))
-#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
-#>   Invalid choice: my_valid_devops_envs2("ABC")
+#> Your choice:
+#> dev
+#> ABC
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs2("ABC")
 ```
 
 ``` r
 my_valid_devops_envs(x = c("DEV", "ABC"), strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs("ABC")
+#> Your choice:
+#> dev
+#> ABC
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 my_valid_devops_envs2("DEV", "ABC", .strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs2("ABC")
+#> Your choice:
+#> dev
+#> ABC
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 ```
@@ -243,12 +331,24 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs("abc"))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs("abc")
+#> Your choice:
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs("abc")
 ```
 
 ``` r
 my_valid_devops_envs("abc", strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs("abc")
+#> Your choice:
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #> named character(0)
 ```
 
@@ -256,18 +356,48 @@ Partially invalid
 
 ``` r
 try(my_valid_devops_envs(c("dev", "abc")))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs("abc")
+#> Your choice:
+#> dev
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs("abc")
 try(my_valid_devops_envs2("dev", "abc"))
-#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
-#>   Invalid choice: my_valid_devops_envs2("abc")
+#> Your choice:
+#> dev
+#> abc
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs2("abc")
 ```
 
 ``` r
 my_valid_devops_envs(c("dev", "abc"), strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs("abc")
+#> Your choice:
+#> dev
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 my_valid_devops_envs2("dev", "abc", .strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs2("abc")
+#> Your choice:
+#> dev
+#> abc
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 ```
@@ -295,12 +425,24 @@ Invalid:
 
 ``` r
 try(my_valid_devops_envs(4))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs(4)
+#> Your choice:
+#> 4
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs(4)
 ```
 
 ``` r
 my_valid_devops_envs(4, strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs(4)
+#> Your choice:
+#> 4
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #> named character(0)
 ```
 
@@ -308,18 +450,48 @@ Partially invalid:
 
 ``` r
 try(my_valid_devops_envs(x = c(1, 4)))
-#> Error in valid(choice = x, choices = choices, ...) : 
-#>   Invalid choice: my_valid_devops_envs(4)
+#> Your choice:
+#> dev
+#> 4
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs(4)
 try(my_valid_devops_envs2(1, 4))
-#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
-#>   Invalid choice: my_valid_devops_envs2(4)
+#> Your choice:
+#> dev
+#> 4
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs2(4)
 ```
 
 ``` r
 my_valid_devops_envs(x = c(1, 4), strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs(4)
+#> Your choice:
+#> dev
+#> 4
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 my_valid_devops_envs2(1, 4, .strict = FALSE)
+#> Warning: Invalid choice: my_valid_devops_envs2(4)
+#> Your choice:
+#> dev
+#> 4
+#> 
+#> Valid choices:
+#> dev
+#> staging
+#> prod
 #>   DEV 
 #> "dev"
 ```
@@ -360,8 +532,13 @@ try(
     devops_env = my_valid_devops_envs2("abc")
   )
 )
-#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
-#>   Invalid choice: my_valid_devops_envs2("abc")
+#> Your choice:
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs2("abc")
 ```
 
 ``` r
@@ -370,8 +547,14 @@ try(
     devops_env = my_valid_devops_envs2("dev", "abc")
   )
 )
-#> Error in valid(choice = choice, choices = .choices, reverse = .reverse,  : 
-#>   Invalid choice: my_valid_devops_envs2("abc")
+#> Your choice:
+#> dev
+#> abc
+#> Valid choices:
+#> dev
+#> staging
+#> prod
+#> Error : Invalid choice: my_valid_devops_envs2("abc")
 ```
 
 #### Lazy input validation

@@ -72,12 +72,66 @@ test_that("Yes/no", {
   expect_identical(result, expected)
 })
 
+# Keep/reset --------------------------------------------------------------
+
+test_that("Keep/reset", {
+    result <- valid_keep_reset()
+    expected <- c(keep = "Keep", reset = "Reset")
+    expect_identical(result, expected)
+
+    result <- valid_keep_reset("Keep")
+    expected <- c(keep = "Keep")
+    expect_identical(result, expected)
+
+    expect_error(valid_keep_reset("KEEP"))
+    result <- valid_keep_reset(c("Keep", "RESET"), strict = FALSE)
+    expected <- c(keep = "Keep")
+    expect_identical(result, expected)
+})
+
 # Again/exit --------------------------------------------------------------
 
 test_that("Again/exit", {
   result <- valid_again_exit()
   expected <- c(again = "Let me start over", exit = "Exit")
   expect_identical(result, expected)
+})
+
+# Yes/no/again_exit ---------------------------------------------------
+
+test_that("Yes/no/again/exit", {
+    result <- valid_yes_no_again_exit()
+    expected <- c(yes = "Yes", no = "No", again = "Let me start over", exit = "Exit"
+    )
+    expect_identical(result, expected)
+
+    result <- valid_yes_no_again_exit("No")
+    expected <- c(no = "No")
+    expect_identical(result, expected)
+
+    expect_error(valid_yes_no_again_exit("NO"))
+    result <- valid_yes_no_again_exit(c("Yes", "NO"), strict = FALSE)
+    expected <- c(yes = "Yes")
+    expect_identical(result, expected)
+})
+
+
+# Keep/reset/again_exit ---------------------------------------------------
+
+test_that("Keep/reset/again/exit", {
+    result <- valid_keep_reset_again_exit()
+    expected <- c(keep = "Keep", reset = "Reset", again = "Let me start over",
+        exit = "Exit")
+    expect_identical(result, expected)
+
+    result <- valid_keep_reset_again_exit("Reset")
+    expected <- c(reset = "Reset")
+    expect_identical(result, expected)
+
+    expect_error(valid_keep_reset_again_exit("KEEP"))
+    result <- valid_keep_reset_again_exit(c("Keep", "RESET"), strict = FALSE)
+    expected <- c(keep = "Keep")
+    expect_identical(result, expected)
 })
 
 # None --------------------------------------------------------------------

@@ -71,6 +71,12 @@ try(valid_devops_envs("I don't exist"))
 valid_licenses()
 valid_licenses("mit")
 try(valid_licenses("I don't exist"))
+
+valid_yes_no()
+valid_again_exit()
+valid_yes_no_again_exit()
+valid_keep_reset()
+valid_keep_reset_again_exit()
 ```
 
 You can reverse the order or flip names and values

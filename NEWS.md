@@ -1,3 +1,11 @@
+# valid 0.0.0.9008 (2022-08-09)
+
+Reset
+
+- Added `valid_keep_reset()`
+- Added `valid_keep_reset_again_exit()`
+
+----------
 # valid 0.0.0.9008 (2022-05-02)
 
 Better messages for invalid choices
