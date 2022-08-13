@@ -1,3 +1,11 @@
+# valid 0.0.0.9009 (2022-08-13)
+
+Remote storage
+
+- Added `valid_remote_storage()`
+
+----------
+
 # valid 0.0.0.9008 (2022-08-09)
 
 Reset

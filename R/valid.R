@@ -560,3 +560,32 @@ valid_dep_types <- function(
         ...
     )
 }
+
+# Remote storage ----------------------------------------------------------
+
+#' Valid remote storage
+#'
+#' @param storage ([character]) Selection from available valid choices
+#' @param ... Further arguments that will be passed to [valid::valid2()]
+#'
+#' @return
+#' @export
+#' @examples
+#' valid_remote_storage()
+#' valid_authentication("ssh")
+#' try(valid_authentication("invalid"))
+#' valid_authentication(reverse = TRUE)
+#' valid_authentication(flip = TRUE)
+#' valid_authentication(unname = TRUE)
+valid_remote_storage <- function(
+    storage = character(),
+    ...
+) {
+    storages <- c("aws", "gcp")
+    names(storages) <- storages
+    valid::valid2(
+        storage,
+        .choices = storages,
+        ...
+    )
+}

@@ -137,6 +137,21 @@ valid_keep_reset_again_exit()
 #>              "Keep"             "Reset" "Let me start over"              "Exit"
 ```
 
+``` r
+valid_remote_storage()
+#>   aws   gcp 
+#> "aws" "gcp"
+valid_remote_storage("gcp")
+#>   gcp 
+#> "gcp"
+valid_remote_storage("gcp", "aws")
+#>   gcp   aws 
+#> "gcp" "aws"
+try(valid_remote_storage("gcp")("I don't exist"))
+#> Error in try(valid_remote_storage("gcp")("I don't exist")) : 
+#>   attempt to apply non-function
+```
+
 You can reverse the order or flip names and values
 
 ``` r

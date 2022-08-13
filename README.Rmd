@@ -79,6 +79,14 @@ valid_keep_reset()
 valid_keep_reset_again_exit()
 ```
 
+```{r}
+valid_remote_storage()
+valid_remote_storage("gcp")
+valid_remote_storage("gcp", "aws")
+try(valid_remote_storage("gcp")("I don't exist"))
+```
+
+
 You can reverse the order or flip names and values
 
 ```{r}

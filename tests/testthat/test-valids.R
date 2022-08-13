@@ -115,7 +115,6 @@ test_that("Yes/no/again/exit", {
     expect_identical(result, expected)
 })
 
-
 # Keep/reset/again_exit ---------------------------------------------------
 
 test_that("Keep/reset/again/exit", {
@@ -199,4 +198,12 @@ test_that("Package dependency types", {
       LinkingTo = "LinkingTo"
     )
   expect_identical(result, expected)
+})
+
+# Remote storage ----------------------------------------------------------
+
+test_that("Remote storage", {
+    result <- valid_remote_storage()
+    expected <- c(aws = "aws", gcp = "gcp")
+    expect_identical(result, expected)
 })
