@@ -1,3 +1,13 @@
+# valid 0.0.0.9010 (2022-08-13)
+
+Storage
+
+- Added `valid_storage_local()`
+- Modified `valid_remote_storage()`: renamed to `valid_storage_remote()`
+- Added `valid_storage()`
+
+----------
+
 # valid 0.0.0.9009 (2022-08-13)
 
 Remote storage

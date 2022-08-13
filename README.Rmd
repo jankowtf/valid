@@ -79,13 +79,29 @@ valid_keep_reset()
 valid_keep_reset_again_exit()
 ```
 
+#### Storage
+
 ```{r}
-valid_remote_storage()
-valid_remote_storage("gcp")
-valid_remote_storage("gcp", "aws")
-try(valid_remote_storage("gcp")("I don't exist"))
+valid_storage_remote()
+valid_storage_remote("gcp_s3")
+valid_storage_remote("gcp_cs", "aws_s3", "gcp_s3")
+valid_storage_remote(1, 3)
+try(valid_storage_remote("I don't exist"))
 ```
 
+```{r}
+valid_storage_local()
+valid_storage_local("fs")
+valid_storage_local(1)
+try(valid_storage_local("I don't exist"))
+```
+
+```{r}
+valid_storage()
+valid_storage("fs", "gcp_s3", "aws_s3")
+valid_storage(2, 3, 1)
+try(valid_storage("I don't exist"))
+```
 
 You can reverse the order or flip names and values
 

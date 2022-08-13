@@ -1,19 +1,24 @@
+---
+output: github_document
+editor_options: 
+  chunk_output_type: console
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+
 
 # valid
 
 <!-- badges: start -->
-
-[![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/valid)](https://CRAN.R-project.org/package=valid)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/valid)](https://CRAN.R-project.org/package=valid)
 <!-- badges: end -->
 
 ## Installation
 
-``` r
+
+```r
 # install.packages("remotes")
 remotes::install_github("rappster/valid")
 ```
@@ -24,26 +29,27 @@ Helpers for facilitating systematic input validation
 
 ## Why?
 
-Input validation is tedious already. This package hopefully provides
-some functionality to make the task a bit easier or at least more fun.
+Input validation is tedious already. This package hopefully provides some
+functionality to make the task a bit easier or at least more fun.
 
 ## How?
 
-``` r
+
+```r
 library(valid)
 ```
 
-The actual workhorse is `valid()` while `valid2()` makes choice input a
-bit more convenient via the `...` mechanism.
+The actual workhorse is `valid()` while `valid2()` makes choice input a bit more
+convenient via the `...` mechanism.
 
 ### Built-in functions
 
 There are some built-in functions for typical validation tasks.
 
-The number of such built-in functions will grow over time in a “scratch
-my own itch” manner
+The number of such built-in functions will grow over time in a "scratch my own itch" manner
 
-``` r
+
+```r
 valid_authentication()
 #>     ssh   https 
 #>   "ssh" "https"
@@ -139,7 +145,8 @@ valid_keep_reset_again_exit()
 
 #### Storage
 
-``` r
+
+```r
 valid_storage_remote()
 #>   aws_s3   gcp_cs   gcp_s3 
 #> "aws_s3" "gcp_cs" "gcp_s3"
@@ -162,7 +169,8 @@ try(valid_storage_remote("I don't exist"))
 #> Error : Invalid choice: valid_storage_remote("I don't exist")
 ```
 
-``` r
+
+```r
 valid_storage_local()
 #>   fs 
 #> "fs"
@@ -180,7 +188,8 @@ try(valid_storage_local("I don't exist"))
 #> Error : Invalid choice: valid_storage_local("I don't exist")
 ```
 
-``` r
+
+```r
 valid_storage()
 #>       fs   aws_s3   gcp_cs   gcp_s3 
 #>     "fs" "aws_s3" "gcp_cs" "gcp_s3"
@@ -203,7 +212,8 @@ try(valid_storage("I don't exist"))
 
 You can reverse the order or flip names and values
 
-``` r
+
+```r
 valid_devops_envs(reverse = TRUE)
 #>      prod   staging       dev 
 #>    "prod" "staging"     "dev"
@@ -218,9 +228,10 @@ valid_devops_envs(unname = TRUE)
 
 #### Definition
 
-You can build your functions on top of `valid::valid()`
+You can build your functions on top of `valid::valid()` 
 
-``` r
+
+```r
 my_valid_devops_envs <- function(
   x = character(),
   ...
@@ -250,30 +261,32 @@ my_valid_devops_envs2 <- function(
 
 #### Apply without explicit choice
 
-``` r
+
+```r
 my_valid_devops_envs()
 #>       DEV   STAGING      PROD 
 #>     "dev" "staging"    "prod"
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(reverse = TRUE)
 #>      PROD   STAGING       DEV 
 #>    "prod" "staging"     "dev"
 ```
 
-``` r
+```r
 my_valid_devops_envs(flip = TRUE)
 #>       dev   staging      prod 
 #>     "DEV" "STAGING"    "PROD"
 ```
 
-``` r
+```r
 my_valid_devops_envs(unname = TRUE)
 #> [1] "dev"     "staging" "prod"
 ```
 
-``` r
+```r
 my_valid_devops_envs(flip = TRUE, unname = TRUE)
 #> [1] "DEV"     "STAGING" "PROD"
 ```
@@ -282,13 +295,15 @@ my_valid_devops_envs(flip = TRUE, unname = TRUE)
 
 Valid:
 
-``` r
+
+```r
 my_valid_devops_envs("PROD")
 #>   PROD 
 #> "prod"
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(c("STAGING", "PROD"))
 #>   STAGING      PROD 
 #> "staging"    "prod"
@@ -299,7 +314,8 @@ my_valid_devops_envs2("STAGING", "PROD")
 
 Invalid:
 
-``` r
+
+```r
 try(my_valid_devops_envs("ABC"))
 #> Your choice:
 #> ABC
@@ -310,7 +326,8 @@ try(my_valid_devops_envs("ABC"))
 #> Error : Invalid choice: my_valid_devops_envs("ABC")
 ```
 
-``` r
+
+```r
 my_valid_devops_envs("ABC", strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs("ABC")
 #> Your choice:
@@ -322,9 +339,10 @@ my_valid_devops_envs("ABC", strict = FALSE)
 #> named character(0)
 ```
 
-Partially invalid:
+Partially invalid: 
 
-``` r
+
+```r
 try(my_valid_devops_envs(x = c("DEV", "ABC")))
 #> Your choice:
 #> dev
@@ -346,7 +364,8 @@ try(my_valid_devops_envs2("DEV", "ABC"))
 #> Error : Invalid choice: my_valid_devops_envs2("ABC")
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(x = c("DEV", "ABC"), strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs("ABC")
 #> Your choice:
@@ -376,13 +395,15 @@ my_valid_devops_envs2("DEV", "ABC", .strict = FALSE)
 
 Valid:
 
-``` r
+
+```r
 my_valid_devops_envs("dev")
 #>   DEV 
 #> "dev"
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(c("dev", "staging"))
 #>       DEV   STAGING 
 #>     "dev" "staging"
@@ -393,7 +414,8 @@ my_valid_devops_envs2("dev", "staging")
 
 Invalid:
 
-``` r
+
+```r
 try(my_valid_devops_envs("abc"))
 #> Your choice:
 #> abc
@@ -404,7 +426,8 @@ try(my_valid_devops_envs("abc"))
 #> Error : Invalid choice: my_valid_devops_envs("abc")
 ```
 
-``` r
+
+```r
 my_valid_devops_envs("abc", strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs("abc")
 #> Your choice:
@@ -418,7 +441,8 @@ my_valid_devops_envs("abc", strict = FALSE)
 
 Partially invalid
 
-``` r
+
+```r
 try(my_valid_devops_envs(c("dev", "abc")))
 #> Your choice:
 #> dev
@@ -440,7 +464,8 @@ try(my_valid_devops_envs2("dev", "abc"))
 #> Error : Invalid choice: my_valid_devops_envs2("abc")
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(c("dev", "abc"), strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs("abc")
 #> Your choice:
@@ -470,13 +495,15 @@ my_valid_devops_envs2("dev", "abc", .strict = FALSE)
 
 Valid:
 
-``` r
+
+```r
 my_valid_devops_envs(2)
 #>   STAGING 
 #> "staging"
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(c(2, 3))
 #>   STAGING      PROD 
 #> "staging"    "prod"
@@ -487,7 +514,8 @@ my_valid_devops_envs2(2, 3)
 
 Invalid:
 
-``` r
+
+```r
 try(my_valid_devops_envs(4))
 #> Your choice:
 #> 4
@@ -498,7 +526,8 @@ try(my_valid_devops_envs(4))
 #> Error : Invalid choice: my_valid_devops_envs(4)
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(4, strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs(4)
 #> Your choice:
@@ -510,9 +539,10 @@ my_valid_devops_envs(4, strict = FALSE)
 #> named character(0)
 ```
 
-Partially invalid:
+Partially invalid: 
 
-``` r
+
+```r
 try(my_valid_devops_envs(x = c(1, 4)))
 #> Your choice:
 #> dev
@@ -534,7 +564,8 @@ try(my_valid_devops_envs2(1, 4))
 #> Error : Invalid choice: my_valid_devops_envs2(4)
 ```
 
-``` r
+
+```r
 my_valid_devops_envs(x = c(1, 4), strict = FALSE)
 #> Warning: Invalid choice: my_valid_devops_envs(4)
 #> Your choice:
@@ -562,7 +593,8 @@ my_valid_devops_envs2(1, 4, .strict = FALSE)
 
 ### Use validation function inside of another function
 
-``` r
+
+```r
 foo <- function(
   devops_env = my_valid_devops_envs2("dev")
 ) {
@@ -576,21 +608,24 @@ foo <- function(
 
 #### Keeping the default
 
-``` r
+
+```r
 foo()
 #> DevOps env: dev
 ```
 
 #### Eager input validation
 
-``` r
+
+```r
 foo(
   devops_env = my_valid_devops_envs2("dev")
 )
 #> DevOps env: dev
 ```
 
-``` r
+
+```r
 try(
   foo(
     devops_env = my_valid_devops_envs2("abc")
@@ -605,7 +640,8 @@ try(
 #> Error : Invalid choice: my_valid_devops_envs2("abc")
 ```
 
-``` r
+
+```r
 try(
   foo(
     devops_env = my_valid_devops_envs2("dev", "abc")
@@ -623,14 +659,16 @@ try(
 
 #### Lazy input validation
 
-``` r
+
+```r
 foo(
   devops_env = "dev"
 )
 #> DevOps env: dev
 ```
 
-``` r
+
+```r
 try(
   foo(
     devops_env = "abc"
@@ -642,7 +680,5 @@ try(
 
 ## Code of Conduct
 
-Please note that the valid project is released with a [Contributor Code
-of
-Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
-By contributing to this project, you agree to abide by its terms.
+Please note that the valid project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+

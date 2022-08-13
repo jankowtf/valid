@@ -561,7 +561,7 @@ valid_dep_types <- function(
     )
 }
 
-# Remote storage ----------------------------------------------------------
+# Storage -----------------------------------------------------------------
 
 #' Valid remote storage
 #'
@@ -571,17 +571,71 @@ valid_dep_types <- function(
 #' @return
 #' @export
 #' @examples
-#' valid_remote_storage()
-#' valid_authentication("ssh")
-#' try(valid_authentication("invalid"))
-#' valid_authentication(reverse = TRUE)
-#' valid_authentication(flip = TRUE)
-#' valid_authentication(unname = TRUE)
-valid_remote_storage <- function(
+#' valid_storage_remote()
+#' valid_storage_remote("gcp_s3")
+#' try(valid_storage_remote("invalid"))
+#' valid_storage_remote(reverse = TRUE)
+#' valid_storage_remoten(flip = TRUE)
+#' valid_storage_remote(unname = TRUE)
+valid_storage_remote <- function(
     storage = character(),
     ...
 ) {
-    storages <- c("aws", "gcp")
+    storages <- c("aws_s3", "gcp_cs", "gcp_s3")
+    names(storages) <- storages
+    valid::valid2(
+        storage,
+        .choices = storages,
+        ...
+    )
+}
+
+#' Valid local storage
+#'
+#' @param storage ([character]) Selection from available valid choices
+#' @param ... Further arguments that will be passed to [valid::valid2()]
+#'
+#' @return
+#' @export
+#' @examples
+#' valid_storage_local()
+#' valid_storage_local("fs")
+#' try(valid_storage_local("invalid"))
+#' valid_storage_local(reverse = TRUE)
+#' valid_storage_localn(flip = TRUE)
+#' valid_storage_local(unname = TRUE)
+valid_storage_local <- function(
+    storage = character(),
+    ...
+) {
+    storages <- c("fs")
+    names(storages) <- storages
+    valid::valid2(
+        storage,
+        .choices = storages,
+        ...
+    )
+}
+
+#' Valid storage
+#'
+#' @param storage ([character]) Selection from available valid choices
+#' @param ... Further arguments that will be passed to [valid::valid2()]
+#'
+#' @return
+#' @export
+#' @examples
+#' valid_storage()
+#' valid_storage("fs", "aws_s3)
+#' try(valid_storage("invalid"))
+#' valid_storage(reverse = TRUE)
+#' valid_storage(flip = TRUE)
+#' valid_storage(unname = TRUE)
+valid_storage <- function(
+    storage = character(),
+    ...
+) {
+    storages <- c(valid_storage_local(), valid_storage_remote())
     names(storages) <- storages
     valid::valid2(
         storage,

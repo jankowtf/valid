@@ -202,8 +202,29 @@ test_that("Package dependency types", {
 
 # Remote storage ----------------------------------------------------------
 
-test_that("Remote storage", {
-    result <- valid_remote_storage()
-    expected <- c(aws = "aws", gcp = "gcp")
+test_that("Storage: remote", {
+    result <- valid_storage_remote()
+    expected <- c(aws_s3 = "aws_s3", gcp_cs = "gcp_cs", gcp_s3 = "gcp_s3")
+    expect_identical(result, expected)
+
+    result <- valid_storage_remote("gcp_cs", "aws_s3", "gcp_s3")
+    expected <- c(gcp_cs = "gcp_cs", aws_s3 = "aws_s3", gcp_s3 = "gcp_s3")
+    expect_identical(result, expected)
+})
+
+test_that("Storage: local", {
+    result <- valid_storage_local()
+    expected <- c(fs = "fs")
+    expect_identical(result, expected)
+})
+
+test_that("Storage", {
+    result <- valid_storage()
+    expected <- c(fs = "fs", aws_s3 = "aws_s3", gcp_cs = "gcp_cs", gcp_s3 = "gcp_s3"
+    )
+    expect_identical(result, expected)
+
+    result <- valid_storage("aws_s3", "fs")
+    expected <- c(aws_s3 = "aws_s3", fs = "fs")
     expect_identical(result, expected)
 })
